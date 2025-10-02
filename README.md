@@ -21,7 +21,7 @@ A modern and minimal **Lovelace thermostat card** for Home Assistant.
    ```
 
 ### Manual
-Copy `dist/simply-thermostat-card.js` to `/config/www/community/simply-thermostat-card/`.
+Copy `simply-thermostat-card.js` to `/config/www/community/simply-thermostat-card/`.
 
 ## Usage
 ```yaml

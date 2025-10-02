@@ -1,1 +1,1 @@
-<JS CODE FROM EARLIER>
+// Source code goes here (JS code from earlier)
