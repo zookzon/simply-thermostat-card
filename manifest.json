@@ -1,9 +1,0 @@
-{
-  "domain": "simply_thermostat_card",
-  "name": "Simply Thermostat Card",
-  "documentation": "https://github.com/yourname/simply-thermostat-card",
-  "requirements": [],
-  "dependencies": [],
-  "codeowners": ["@yourname"],
-  "version": "1.0.0"
-}

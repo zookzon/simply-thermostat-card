@@ -1,8 +1,0 @@
-{
-  "name": "Simply Thermostat Card",
-  "filename": "simply-thermostat-card.js",
-  "render_readme": true,
-  "domains": ["lovelace"],
-  "country": "ALL",
-  "homeassistant": "2024.6.0"
-}
