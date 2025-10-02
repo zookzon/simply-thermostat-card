@@ -1,0 +1,17 @@
+{
+  "name": "simply-thermostat-card",
+  "version": "1.0.0",
+  "description": "Thermostat Lovelace card with chip header, toggle rows and chip bar",
+  "main": "dist/simply-thermostat-card.js",
+  "scripts": {
+    "build": "rollup -c"
+  },
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "lit": "^3.1.0",
+    "rollup": "^4.20.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-terser": "^7.0.2"
+  }
+}
