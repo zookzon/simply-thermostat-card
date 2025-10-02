@@ -1,0 +1,9 @@
+{
+  "domain": "simply_thermostat_card",
+  "name": "Simply Thermostat Card",
+  "documentation": "https://github.com/zookzon/simply-thermostat-card",
+  "requirements": [],
+  "dependencies": [],
+  "codeowners": ["@zookzon"],
+  "version": "1.0.3"
+}
