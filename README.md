@@ -1,16 +1,18 @@
-# Simply Thermostat Card (YAML UI, Compat)
+# Simply Thermostat Card (YAML UI Compat v2)
 
-Single custom card that replicates your YAML stack:
-- Header with mode icon/color + cooling animation
-- Big temperature with +/-
-- Mode icon row (off/cool/dry/fan_only/heat) with themed active color
-- Chips: temperature, humidity, weather (optional), fan toggle
-- Fan panel (auto/low/medium/high)
+- Header with dynamic icon/color + animations (cool/heat/fan/auto/heat_cool/dry)
+- Big target temp with real + / − icons
+- HVAC mode row: auto-sync from `hvac_modes`
+- Optional rows/chips: fan, swing, preset (`row` | `chip` | `false`)
+- Panels appear at the **bottom** when toggled from chips
 
 ## Example
 ```yaml
 type: custom:simply-thermostat-card
-entity: climate.air_lg_mom
-name: Air LG Mom
-weather_entity: weather.tmd_weather_forecast  # optional
+entity: climate.virtual_ac_5
+name: Virtual AC 5
+weather_entity: weather.tmd_weather_forecast
+show_fan: chip
+show_swing: chip
+show_preset: chip
 ```
