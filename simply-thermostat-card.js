@@ -1,4 +1,4 @@
-console.info("%c Simply-Thermostat-Card (yaml-ui compat v3) loaded", "color: lime; font-weight: bold");
+console.info("%c Simply-Thermostat-Card (yaml-ui compat v4) loaded", "color: lime; font-weight: bold");
 const LitElementBase = window.LitElement || Object.getPrototypeOf(customElements.get("ha-panel-lovelace"));
 const html = window.html || LitElementBase.prototype.html;
 const css = window.css || LitElementBase.prototype.css;
@@ -9,7 +9,8 @@ const MODE_ICONS = {
   fan_only:"mdi:fan", auto:"mdi:autorenew", heat_cool:"mdi:autorenew"
 };
 const MODE_COLORS = {
-  off:"grey", cool:"#2196f3", heat:"#f44336", dry:"#1BCACC", fan_only:"#ff9800", auto:"#4caf50", heat_cool:"#4caf50", idle:"grey"
+  off:"grey", cool:"#2196f3", heat:"#f44336", dry:"#1BCACC",
+  fan_only:"#ff9800", auto:"#4caf50", heat_cool:"#4caf50", idle:"grey"
 };
 
 // Fan icon by value
@@ -20,7 +21,6 @@ function fanIcon(mode){
        : mode==="high" ? "mdi:fan-speed-3"
        : "mdi:fan";
 }
-
 // Swing icon by value
 function swingIcon(mode){
   if(!mode) return "mdi:swap-vertical";
@@ -46,21 +46,26 @@ class SimplyThermostatCard extends LitElementBase {
     .header .meta{ font-size:.82rem; color:#cfcfcf; line-height:1.25; white-space:pre-line; }
     .icon-wrap{ width:32px; height:32px; display:grid; place-items:center; border-radius:50%; background:rgba(255,255,255,.06); margin-top:-4px; }
     .anim-cool{ animation:wobbling .7s linear infinite alternate; }
-    .anim-heat{ animation: fire 1.5s infinite; transform-origin:50% 85%; }
+    .anim-heat{ animation: fire 1.5s infinite; transform-origin:50% 85%; color:${MODE_COLORS.heat}; }
     .anim-rotate{ animation:spin 2s linear infinite; }
     .anim-beat{ animation:beat 1.3s ease-out infinite both; }
     @keyframes wobbling{0%{transform:rotate(-12deg)}100%{transform:rotate(12deg)}}
     @keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
     @keyframes beat{0%,60%{transform:scale(1)} 33%{transform:scale(1.12)}}
-    @keyframes fire{0%{ transform: rotate(-1deg) scaleY(1.0); color: rgb(var(--rgb-red)); opacity:.8;}50%{ transform: rotate(1deg) scaleY(1.1); color: rgb(var(--rgb-deep-orange)); opacity:1;}100%{ transform: rotate(-1deg) scaleY(1.0); color: rgb(var(--rgb-red)); opacity:.8;}}
+    @keyframes fire{0%{ transform: rotate(-1deg) scaleY(1.0); opacity:.9;}50%{ transform: rotate(1deg) scaleY(1.1); opacity:1;}100%{ transform: rotate(-1deg) scaleY(1.0); opacity:.9;}}
     .vcenter{ display:flex; align-items:center; justify-content:center; }
     .temp-value{ font-size:35px; color:#fff; font-weight:700; min-width:72px; text-align:center; }
     mwc-icon-button{ color:#9e9e9e; }
 
-    /* Rows: single line (no wrap), scroll if overflow */
-    .row{ display:flex; gap:12px; flex-wrap:nowrap; margin-top:8px; overflow-x:auto; scrollbar-width:thin; }
-    .btn{ border-radius:10px; background:#2d2d2d; color:#9e9e9e; height:44px; min-width:44px;
-          display:flex; align-items:center; justify-content:center; padding:0 12px; cursor:pointer; flex:0 0 auto; }
+    /* Rows: single line (no wrap), space-between, fill width, no scroll */
+    .row{ display:flex; gap:12px; flex-wrap:nowrap; margin-top:8px; justify-content:space-between; }
+    .row > *{ flex:1 1 0; }
+    .btn{
+      border-radius:10px; background:#2d2d2d; color:#9e9e9e; height:44px;
+      display:flex; align-items:center; justify-content:center; cursor:pointer;
+      min-width:0; /* allow shrink */ 
+      padding:0 6px;
+    }
     .btn:hover{ background:#363636; color:#cfcfcf; }
     .btn.active.off{ background:#363636; color:#9e9e9e; }
     .btn.active.cool{ background:#1d3447; color:#2196f3; }
@@ -68,7 +73,7 @@ class SimplyThermostatCard extends LitElementBase {
     .btn.active.dry{ background:#164749; color:#1BCACC; }
     .btn.active.fan_only{ background:#493516; color:#ff9800; }
     .btn.active.auto, .btn.active.heat_cool{ background:#263926; color:#4caf50; }
-    .label{ margin-left:6px; font-size:.85rem; }
+    .label{ font-size:.85rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 
     /* chips */
     .chips{ display:flex; align-items:center; justify-content:space-between; margin-top:6px; }
@@ -83,7 +88,8 @@ class SimplyThermostatCard extends LitElementBase {
 
     /* Panels */
     .panel{ margin:6px 8px 0; }
-    .panel-row{ display:flex; gap:12px; flex-wrap:nowrap; overflow-x:auto; }
+    .panel-row{ display:flex; gap:12px; flex-wrap:nowrap; justify-content:space-between; }
+    .panel-row > *{ flex:1 1 0; }
     .panel .btn{ height:40px; }
   `;}
 
@@ -91,7 +97,7 @@ class SimplyThermostatCard extends LitElementBase {
     if(!c || !c.entity) throw new Error("Entity is required");
     this._config = {
       entity: c.entity,
-      name: c.name, // not used for display; we use friendly_name from entity
+      name: c.name, // display uses friendly_name
       show_fan: c.show_fan ?? "chip",     // true | "chip" | false
       show_swing: c.show_swing ?? "chip", // true | "chip" | false
       show_preset: c.show_preset ?? "chip" // true | "chip" | false
@@ -123,7 +129,6 @@ class SimplyThermostatCard extends LitElementBase {
 
     const rows = [];
     rows.push(this._renderHVACRow(hvacModes, hvacMode));
-
     if(this._config.show_fan===true && fanModes.length) rows.push(this._renderIconRow("fan_mode", fanModes, st.attributes.fan_mode, fanIcon));
     if(this._config.show_swing===true && swingModes.length) rows.push(this._renderIconRow("swing_mode", swingModes, st.attributes.swing_mode, swingIcon));
     if(this._config.show_preset===true && presetModes.length) rows.push(this._renderTextRow("preset_mode", presetModes, st.attributes.preset_mode));
@@ -173,6 +178,7 @@ class SimplyThermostatCard extends LitElementBase {
   // Rows
   _renderHVACRow(list, current){
     if(!list || !list.length) return html``;
+    // distribute buttons across full width
     return html`
       <div class="row">
         ${list.map(m=>{
@@ -303,4 +309,4 @@ class SimplyThermostatCard extends LitElementBase {
 
 customElements.define("simply-thermostat-card", SimplyThermostatCard);
 window.customCards = window.customCards || [];
-window.customCards.push({ type:"simply-thermostat-card", name:"Simply Thermostat Card", description:"All-in-one card with dynamic rows, chips, and bottom panels. v3" });
+window.customCards.push({ type:"simply-thermostat-card", name:"Simply Thermostat Card", description:"All-in-one card with flexible rows, chips, and bottom panels. v4" });
