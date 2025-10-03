@@ -45,8 +45,8 @@ class SimplyThermostatCard extends LitElementBase {
 
     /* ⭕ วงกลมไอคอน: เท่ากับ Mushroom (42px) */
     .icon-wrap{
-      width: var(--icon-size, 42px);
-      height: var(--icon-size, 42px);
+      width: var(--icon-size, 32px);
+      height: var(--icon-size, 32px);
       display:grid; place-items:center; border-radius:50%;
       box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
       margin-top:-4px;
@@ -56,25 +56,35 @@ class SimplyThermostatCard extends LitElementBase {
     @keyframes wobbling { 0%{transform:rotate(-80deg);} 100%{transform:rotate(40deg);} }
     @keyframes rotation { 0%{transform:rotate(0);} 100%{transform:rotate(360deg);} }
     @keyframes beat {
-      0%,60% { transform: scale(1); }
-      5%,17%,57% { transform: scale(1.05); }
-      10%,20%,51% { transform: scale(1.08); }
-      25%,45% { transform: scale(1.12); }
-      30%,39% { transform: scale(1.15); }
-      33% { transform: scale(1.18); }
+      0%, 60% { --icon-symbol-size: 21px; }
+      5%, 17%, 57% { --icon-symbol-size: 22px; }
+      10%, 20%, 51% { --icon-symbol-size: 23px; }
+      25%, 45% { --icon-symbol-size: 24px; }
+      30%, 39% { --icon-symbol-size: 25px; }
+      33% { --icon-symbol-size: 26px; }
     }
     @keyframes fire {
-      0%   { transform: rotate(-2deg) scaleY(0.98); opacity:.9; }
-      10%  { transform: rotate( 2deg) scaleY(1.02); opacity:1; }
-      20%  { transform: rotate(-1deg) scaleY(1.05); opacity:.95; }
-      30%  { transform: rotate( 1deg) scaleY(1.00); opacity:1; }
-      40%  { transform: rotate(-2deg) scaleY(1.04); opacity:.92; }
-      50%  { transform: rotate( 2deg) scaleY(1.01); opacity:1; }
-      60%  { transform: rotate(-1deg) scaleY(1.06); opacity:.94; }
-      70%  { transform: rotate( 1deg) scaleY(1.00); opacity:1; }
-      80%  { transform: rotate(-2deg) scaleY(1.03); opacity:.93; }
-      90%  { transform: rotate( 2deg) scaleY(1.01); opacity:1; }
-      100% { transform: rotate(-1deg) scaleY(1.00); opacity:.95; }
+      0% { transform: rotate({{range(-20, 20) | random / 10}}deg) scaleY({{range(9, 12) | random / 10}}); color: rgb(var(--rgb-red)); opacity: {{range(7, 10) | random / 10}}; }
+      5% { transform: rotate({{range(-20, 20) | random / 10}}deg) scaleY({{range(9, 12) | random / 10}}); color: rgb(var(--rgb-deep-orange)); opacity: {{range(7, 10) | random / 10}}; }
+      10% { transform: rotate({{range(-20, 20) | random / 10}}deg) scaleY({{range(9, 12) | random / 10}}); color: rgb(var(--rgb-red)); opacity: {{range(7, 10) | random / 10}}; }
+      15% { transform: rotate({{range(-20, 20) | random / 10}}deg) scaleY({{range(9, 12) | random / 10}}); color: rgb(var(--rgb-deep-orange)); opacity: {{range(7, 10) | random / 10}}; }
+      20% { transform: rotate({{range(-20, 20) | random / 10}}deg) scaleY({{range(9, 12) | random / 10}}); color: rgb(var(--rgb-deep-orange)); opacity: {{range(7, 10) | random / 10}}; }
+      25% { transform: rotate({{range(-20, 20) | random / 10}}deg) scaleY({{range(9, 12) | random / 10}}); color: rgb(var(--rgb-red)); opacity: {{range(7, 10) | random / 10}}; }
+      30% { transform: rotate({{range(-20, 20) | random / 10}}deg) scaleY({{range(9, 12) | random / 10}}); color: rgb(var(--rgb-red)); opacity: {{range(7, 10) | random / 10}}; }
+      35% { transform: rotate({{range(-20, 20) | random / 10}}deg) scaleY({{range(9, 12) | random / 10}}); color: rgb(var(--rgb-deep-orange)); opacity: {{range(7, 10) | random / 10}}; }
+      40% { transform: rotate({{range(-20, 20) | random / 10}}deg) scaleY({{range(9, 12) | random / 10}}); color: rgb(var(--rgb-red)); opacity: {{range(7, 10) | random / 10}}; }
+      45% { transform: rotate({{range(-20, 20) | random / 10}}deg) scaleY({{range(9, 12) | random / 10}}); color: rgb(var(--rgb-deep-orange)); opacity: {{range(7, 10) | random / 10}}; }
+      50% { transform: rotate({{range(-20, 20) | random / 10}}deg) scaleY({{range(9, 12) | random / 10}}); color: rgb(var(--rgb-deep-orange)); opacity: {{range(7, 10) | random / 10}}; }
+      55% { transform: rotate({{range(-20, 20) | random / 10}}deg) scaleY({{range(9, 12) | random / 10}}); color: rgb(var(--rgb-red)); opacity: {{range(7, 10) | random / 10}}; }
+      60% { transform: rotate({{range(-20, 20) | random / 10}}deg) scaleY({{range(9, 12) | random / 10}}); color: rgb(var(--rgb-deep-orange)); opacity: {{range(7, 10) | random / 10}}; }
+      65% { transform: rotate({{range(-20, 20) | random / 10}}deg) scaleY({{range(9, 12) | random / 10}}); color: rgb(var(--rgb-red)); opacity: {{range(7, 10) | random / 10}}; }
+      70% { transform: rotate({{range(-20, 20) | random / 10}}deg) scaleY({{range(9, 12) | random / 10}}); color: rgb(var(--rgb-deep-orange)); opacity: {{range(7, 10) | random / 10}}; }
+      75% { transform: rotate({{range(-20, 20) | random / 10}}deg) scaleY({{range(9, 12) | random / 10}}); color: rgb(var(--rgb-deep-orange)); opacity: {{range(7, 10) | random / 10}}; }
+      80% { transform: rotate({{range(-20, 20) | random / 10}}deg) scaleY({{range(9, 12) | random / 10}}); color: rgb(var(--rgb-red)); opacity: {{range(7, 10) | random / 10}}; }
+      85% { transform: rotate({{range(-20, 20) | random / 10}}deg) scaleY({{range(9, 12) | random / 10}}); color: rgb(var(--rgb-red)); opacity: {{range(7, 10) | random / 10}}; }
+      90% { transform: rotate({{range(-20, 20) | random / 10}}deg) scaleY({{range(9, 12) | random / 10}}); color: rgb(var(--rgb-deep-orange)); opacity: {{range(7, 10) | random / 10}}; }
+      95% { transform: rotate({{range(-20, 20) | random / 10}}deg) scaleY({{range(9, 12) | random / 10}}); color: rgb(var(--rgb-red)); opacity: {{range(7, 10) | random / 10}}; }
+      100% { transform: rotate({{range(-20, 20) | random / 10}}deg) scaleY({{range(9, 12) | random / 10}}); color: rgb(var(--rgb-deep-orange)); opacity: {{range(7, 10) | random / 10}}; }
     }
 
     .vcenter{ display:flex; align-items:center; justify-content:center; }
