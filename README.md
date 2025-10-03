@@ -1,18 +1,19 @@
-# Simply Thermostat Card (YAML UI Compat v2)
+# Simply Thermostat Card (YAML UI Compat v3)
 
-- Header with dynamic icon/color + animations (cool/heat/fan/auto/heat_cool/dry)
-- Big target temp with real + / − icons
-- HVAC mode row: auto-sync from `hvac_modes`
-- Optional rows/chips: fan, swing, preset (`row` | `chip` | `false`)
-- Panels appear at the **bottom** when toggled from chips
+- Header icon color now follows **HVAC mode** (with animations).
+- Target temp +/− use real icons.
+- HVAC modes row: auto from `hvac_modes`.
+- Fan/Swing use **icons**; Preset uses **text**.
+- Config flags: `true` = show as row, `"chip"` = show as chip (panel at bottom), `false` = hide.
+- Rows are single-line (no wrap) with horizontal scroll if overflow.
+- Chips: Temperature, Humidity, and optional Fan/Swing/Preset according to config.
+- **Weather chip removed**.
 
 ## Example
 ```yaml
 type: custom:simply-thermostat-card
 entity: climate.virtual_ac_5
-name: Virtual AC 5
-weather_entity: weather.tmd_weather_forecast
-show_fan: chip
-show_swing: chip
-show_preset: chip
+show_fan: chip        # true | "chip" | false
+show_swing: true      # true | "chip" | false
+show_preset: false    # true | "chip" | false
 ```
