@@ -1,4 +1,8 @@
-import { LitElement, html, css } from "lit";
+console.info("%c Simply-Thermostat-Card (compat) loaded", "color: lime; font-weight: bold");
+
+const LitElementBase = window.LitElement || Object.getPrototypeOf(customElements.get("ha-panel-lovelace"));
+const html = window.html || LitElementBase.prototype.html;
+const css = window.css || LitElementBase.prototype.css;
 
 const MODE_COLORS = {
   cool: "#42A5F5",
@@ -9,7 +13,7 @@ const MODE_COLORS = {
   off: "#9E9E9E"
 };
 
-class SimplyThermostatCard extends LitElement {
+class SimplyThermostatCard extends LitElementBase {
   static get properties() {
     return {
       hass: { attribute: false },
