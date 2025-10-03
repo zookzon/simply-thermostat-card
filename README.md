@@ -1,13 +1,16 @@
-# Simply Thermostat Card (Compat)
+# Simply Thermostat Card (YAML UI, Compat)
 
-A modern and minimal **Lovelace thermostat card** for Home Assistant.
+Single custom card that replicates your YAML stack:
+- Header with mode icon/color + cooling animation
+- Big temperature with +/-
+- Mode icon row (off/cool/dry/fan_only/heat) with themed active color
+- Chips: temperature, humidity, weather (optional), fan toggle
+- Fan panel (auto/low/medium/high)
 
-## Features
-- Chip Header color-coded by hvac_mode
-- Cooling animation
-- Temperature +/− controls
-- Toggleable rows (mode, fan, swing, preset)
-- Chip toggle bar for hidden rows
-- HACS ready
-
-This is the **compat build** (no import of 'lit') so it works on more HA versions.
+## Example
+```yaml
+type: custom:simply-thermostat-card
+entity: climate.air_lg_mom
+name: Air LG Mom
+weather_entity: weather.tmd_weather_forecast  # optional
+```
