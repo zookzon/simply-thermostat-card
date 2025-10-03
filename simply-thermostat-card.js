@@ -1,4 +1,4 @@
-console.info("%c Simply-Thermostat-Card (yaml-ui compat v4.8 FULL) loaded", "color: lime; font-weight: bold");
+console.info("%c Simply-Thermostat-Card (yaml-ui compat v4.9 FULL) loaded", "color: lime; font-weight: bold");
 
 const LitElementBase = window.LitElement || Object.getPrototypeOf(customElements.get("ha-panel-lovelace"));
 const html = window.html || LitElementBase.prototype.html;
@@ -105,8 +105,8 @@ class SimplyThermostatCard extends LitElementBase {
     .chip.yellow .icon{ color:#ffc107; }
     .chip.click{ cursor:pointer; }
 
-    /* แพทช์ panel ให้ align ซ้าย-ขวา เท่ากับ hvac row */
-    .panel{ margin-top:6px; margin-bottom:0; padding:0 12px; }
+    /* ✅ Panel align เท่ากับ hvac row */
+    .panel{ margin-top:6px; margin-bottom:0; }
     .panel-row{ display:flex; gap:12px; flex-wrap:nowrap; justify-content:space-between; }
     .panel-row > *{ flex:1 1 0; }
     .panel .btn{ height:40px; }
@@ -369,5 +369,5 @@ window.customCards = window.customCards || [];
 window.customCards.push({
   type:"simply-thermostat-card",
   name:"Simply Thermostat Card",
-  description:"All-in-one card with mushroom-sized icon ring (42px), YAML animations, chips and panels. v4.8 FULL"
+  description:"All-in-one card with mushroom-sized icon ring (36px), YAML animations, chips and panels. v4.9 FULL"
 });
