@@ -1,4 +1,4 @@
-console.info("%c Simply-Thermostat-Card (yaml-ui compat v4.3 FULL) loaded", "color: lime; font-weight: bold");
+console.info("%c Simply-Thermostat-Card (yaml-ui compat v4.4 FULL) loaded", "color: lime; font-weight: bold");
 
 const LitElementBase = window.LitElement || Object.getPrototypeOf(customElements.get("ha-panel-lovelace"));
 const html = window.html || LitElementBase.prototype.html;
@@ -37,25 +37,50 @@ class SimplyThermostatCard extends LitElementBase {
   };}
 
   static get styles(){ return css`
-    ha-card{ background:var(--ha-card-background,#1f1f1f); border-radius:12px; padding:10px 10px 8px; }
-    .grid2{ display:grid; grid-template-columns:1fr auto; gap:8px; align-items:start; }
+    ha-card{ background:var(--ha-card-background,#1f1f1f); border-radius:12px; padding:12px 12px 10px; }
+    .grid2{ display:grid; grid-template-columns:1fr auto; gap:10px; align-items:start; }
     .header{ display:flex; align-items:flex-start; gap:12px; }
-    .header .name{ font-weight:700; font-size:1.05rem; line-height:1.2; }
-    .header .meta{ font-size:0.9rem; color:#cfcfcf; line-height:1.3; white-space:pre-line; }
-    .icon-wrap{ width:40px; height:40px; display:grid; place-items:center; border-radius:50%; margin-top:-4px; }
-    .anim-cool{ animation:wobbling .7s linear infinite alternate; }
-    .anim-heat{ animation: fire 1.5s infinite; transform-origin:50% 85%; }
-    .anim-rotate{ animation:spin 2s linear infinite; }
-    .anim-beat{ animation:beat 1.3s ease-out infinite both; }
-    @keyframes wobbling{0%{transform:rotate(-12deg)}100%{transform:rotate(12deg)}}
-    @keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
-    @keyframes beat{0%,60%{ transform:scale(1)} 33%{ transform:scale(1.12)}}
-    @keyframes fire{0%{ transform: rotate(-1deg) scaleY(1.0); opacity:.9;}50%{ transform: rotate(1deg) scaleY(1.1); opacity:1;}100%{ transform: rotate(-1deg) scaleY(1.0); opacity:.9;}}
+    .header .name{ font-weight:700; font-size:1.06rem; line-height:1.22; }
+    .header .meta{ font-size:0.92rem; color:#cfcfcf; line-height:1.35; white-space:pre-line; }
+
+    /* ⭕ วงกลมไอคอน: เท่า Mushroom (≈56px) */
+    .icon-wrap{
+      width:56px; height:56px; display:grid; place-items:center; border-radius:50%;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+      margin-top:-4px;
+    }
+
+    /* Keyframes ตาม YAML */
+    @keyframes wobbling { 0%{transform:rotate(-80deg);} 100%{transform:rotate(40deg);} }
+    @keyframes rotation { 0%{transform:rotate(0);} 100%{transform:rotate(360deg);} }
+    @keyframes beat {
+      0%,60% { transform: scale(1); }
+      5%,17%,57% { transform: scale(1.05); }
+      10%,20%,51% { transform: scale(1.08); }
+      25%,45% { transform: scale(1.12); }
+      30%,39% { transform: scale(1.15); }
+      33% { transform: scale(1.18); }
+    }
+    /* fire: เลียนแบบเปลวไฟ (หมุน/ยืด/ทึบแสง) — ไม่เปลี่ยนสีใน keyframes เพื่อหลีกเลี่ยง css-tag error */
+    @keyframes fire {
+      0%   { transform: rotate(-2deg) scaleY(0.98); opacity:.9; }
+      10%  { transform: rotate( 2deg) scaleY(1.02); opacity:1; }
+      20%  { transform: rotate(-1deg) scaleY(1.05); opacity:.95; }
+      30%  { transform: rotate( 1deg) scaleY(1.00); opacity:1; }
+      40%  { transform: rotate(-2deg) scaleY(1.04); opacity:.92; }
+      50%  { transform: rotate( 2deg) scaleY(1.01); opacity:1; }
+      60%  { transform: rotate(-1deg) scaleY(1.06); opacity:.94; }
+      70%  { transform: rotate( 1deg) scaleY(1.00); opacity:1; }
+      80%  { transform: rotate(-2deg) scaleY(1.03); opacity:.93; }
+      90%  { transform: rotate( 2deg) scaleY(1.01); opacity:1; }
+      100% { transform: rotate(-1deg) scaleY(1.00); opacity:.95; }
+    }
 
     .vcenter{ display:flex; align-items:center; justify-content:center; }
     .temp-value{ font-size:35px; color:#fff; font-weight:700; min-width:72px; text-align:center; }
     mwc-icon-button{ color:#9e9e9e; }
 
+    /* แถวปุ่มแบบบรรทัดเดียว (ไม่ห่อ) กินกว้างพอดี */
     .row{ display:flex; gap:12px; flex-wrap:nowrap; margin-top:8px; justify-content:space-between; }
     .row > *{ flex:1 1 0; }
     .btn{
@@ -72,6 +97,7 @@ class SimplyThermostatCard extends LitElementBase {
     .btn.active.auto, .btn.active.heat_cool{ background:#263926; color:#4caf50; }
     .label{ font-size:.9rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 
+    /* Chips */
     .chips{ display:flex; align-items:center; justify-content:space-between; margin-top:6px; }
     .chips-left, .chips-right{ display:flex; gap:10px; align-items:center; }
     .chip{ display:inline-flex; align-items:center; gap:6px; background:transparent; color:#cfe7ff; font-size:.85rem; padding:2px 6px; border-radius:16px; cursor:default; }
@@ -82,6 +108,7 @@ class SimplyThermostatCard extends LitElementBase {
     .chip.yellow .icon{ color:#ffc107; }
     .chip.click{ cursor:pointer; }
 
+    /* Panels (bottom) */
     .panel{ margin:6px 8px 0; }
     .panel-row{ display:flex; gap:12px; flex-wrap:nowrap; justify-content:space-between; }
     .panel-row > *{ flex:1 1 0; }
@@ -108,15 +135,15 @@ class SimplyThermostatCard extends LitElementBase {
     const friendly = st.attributes.friendly_name || this._config.entity;
     const icon = MODE_ICONS[hvacMode] || "mdi:thermostat";
     const color = MODE_COLORS[hvacMode] || MODE_COLORS.off;
-    const bgColor = this._lightenColor(color, 0.4);
+    const bgColor = this._softBg(color); // วงกลมพื้นหลังสีอ่อนตาม mode
 
     const curT = st.attributes.current_temperature;
     const curH = st.attributes.current_humidity != null ? Math.round(st.attributes.current_humidity) : undefined;
     const target = st.attributes.temperature ?? st.attributes.target_temperature ?? "-";
 
-    const hvacAction = st.attributes.hvac_action || (hvacMode==="off"?"off":"idle");
+    // Currently: แสดงตาม mode
     const actionMap = {off:"Off", cool:"Cooling", heat:"Heating", dry:"Drying", fan_only:"Fan", auto:"Auto", heat_cool:"Heat/Cool", idle:"Idle"};
-    const actionText = actionMap[hvacMode] || actionMap[hvacAction] || "Idle";
+    const actionText = actionMap[hvacMode] || "Idle";
     const meta = `Currently: ${actionText}\nState: ${curT!=null?curT+"°C":"-"} | ${curH!=null?curH+"%":"-"}`;
 
     const hvacModes = (st.attributes.hvac_modes||[]).slice();
@@ -130,12 +157,14 @@ class SimplyThermostatCard extends LitElementBase {
     if(this._config.show_swing===true && swingModes.length) rows.push(this._renderIconRow("swing_mode", swingModes, st.attributes.swing_mode, swingIcon));
     if(this._config.show_preset===true && presetModes.length) rows.push(this._renderTextRow("preset_mode", presetModes, st.attributes.preset_mode));
 
+    const animStyle = this._animStyle(hvacMode); // ✅ animation แบบ YAML
+
     return html`
       <ha-card>
         <div class="grid2">
           <div class="header">
             <div class="icon-wrap" style="background:${bgColor}">
-              <ha-icon class="${this._iconAnimClass(hvacMode)}" style="color:${color}" .icon=${icon}></ha-icon>
+              <ha-icon class="${this._iconAnimClass(hvacMode)}" style="color:${color}; ${animStyle}" .icon=${icon}></ha-icon>
             </div>
             <div>
               <div class="name">${friendly}</div>
@@ -163,13 +192,32 @@ class SimplyThermostatCard extends LitElementBase {
   }
 
   _iconAnimClass(mode){
+    // เก็บ class ไว้เผื่อสไตล์/ธีมภายนอก แต่ animation จริงใช้ inline style (_animStyle)
     if(mode==="cool") return "anim-cool";
     if(mode==="heat") return "anim-heat";
     if(mode==="fan_only"||mode==="auto"||mode==="heat_cool") return "anim-rotate";
     if(mode==="dry") return "anim-beat";
     return "";
   }
+  _animStyle(mode){
+    // ตรงตาม YAML:
+    // cool: wobbling 0.7s linear infinite alternate + duration 1s
+    // heat: fire 1.5s infinite + transform-origin:50% 85%
+    // fan_only/auto/heat_cool: rotation linear infinite + duration 2s
+    // dry: beat 1.3s ease-out infinite both
+    // else: animation-duration:0s
+    switch(mode){
+      case "cool": return "animation: wobbling 0.7s linear infinite alternate; animation-duration: 1s;";
+      case "heat": return "animation: fire 1.5s infinite; transform-origin: 50% 85%;";
+      case "fan_only":
+      case "auto":
+      case "heat_cool": return "animation: rotation 2s linear infinite;";
+      case "dry": return "animation: beat 1.3s ease-out infinite both;";
+      default: return "animation-duration: 0s;";
+    }
+  }
 
+  // Rows
   _renderHVACRow(list, current){
     if(!list || !list.length) return html``;
     return html`
@@ -211,6 +259,7 @@ class SimplyThermostatCard extends LitElementBase {
     `;
   }
 
+  // Chips
   _renderChips(st, {fanModes, swingModes, presetModes}){
     const curT = st.attributes.current_temperature;
     const curH = st.attributes.current_humidity != null ? Math.round(st.attributes.current_humidity) : undefined;
@@ -238,6 +287,7 @@ class SimplyThermostatCard extends LitElementBase {
     return html`<div class="chips"><div class="chips-left">${left}</div><div class="chips-right">${right}</div></div>`;
   }
 
+  // Panels (bottom)
   _renderPanel(type, list, current, iconFn){
     if(!list || !list.length) return html``;
     return html`
@@ -272,6 +322,7 @@ class SimplyThermostatCard extends LitElementBase {
     `;
   }
 
+  // Actions
   _togglePanel(which){
     this._panelFan = which==="fan" ? !this._panelFan : false;
     this._panelPreset = which==="preset" ? !this._panelPreset : false;
@@ -294,23 +345,24 @@ class SimplyThermostatCard extends LitElementBase {
   }
   getCardSize(){ return 3; }
 
-  _lightenColor(color, amt){
+  _softBg(color){
     try{
-      const c = color.startsWith("#")?color.substring(1):color;
-      const num = parseInt(c,16);
-      let r = (num>>16)+Math.round(255*amt);
-      let g = ((num>>8)&0x00FF)+Math.round(255*amt);
-      let b = (num&0x0000FF)+Math.round(255*amt);
-      r = r<255?r:255; g = g<255?g:255; b = b<255?b:255;
-      return `rgb(${r},${g},${b},0.25)`; // โปร่งใสหน่อย
-    }catch(e){ return "rgba(255,255,255,0.1)"; }
+      if(color && color[0]==="#"){
+        const c = color.substring(1);
+        const num = parseInt(c,16);
+        const r = (num>>16)&0xFF, g = (num>>8)&0xFF, b = num&0xFF;
+        return `rgba(${r},${g},${b},0.15)`; // อ่อนกว่า icon
+      }
+      return "rgba(255,255,255,0.10)";
+    }catch(e){ return "rgba(255,255,255,0.10)"; }
   }
 }
 
+// Safe define
 try {
   if (typeof SimplyThermostatCard !== "undefined" && !customElements.get("simply-thermostat-card")) {
     customElements.define("simply-thermostat-card", SimplyThermostatCard);
-    console.info("✅ SimplyThermostatCard registered (v4.3 FULL)");
+    console.info("✅ SimplyThermostatCard registered (v4.4 FULL)");
   }
 } catch(e) {
   console.error("❌ Failed to define simply-thermostat-card:", e);
@@ -320,5 +372,5 @@ window.customCards = window.customCards || [];
 window.customCards.push({
   type:"simply-thermostat-card",
   name:"Simply Thermostat Card",
-  description:"All-in-one card with flexible rows, chips, and bottom panels. v4.3 FULL"
+  description:"All-in-one card with flexible rows, chips, and bottom panels. v4.4 FULL (mushroom-sized icon ring + YAML animations)"
 });
