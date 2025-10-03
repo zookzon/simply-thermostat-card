@@ -1,4 +1,4 @@
-console.info("%c Simply-Thermostat-Card (yaml-ui compat v4.4 FULL) loaded", "color: lime; font-weight: bold");
+console.info("%c Simply-Thermostat-Card (yaml-ui compat v4.5 FULL) loaded", "color: lime; font-weight: bold");
 
 const LitElementBase = window.LitElement || Object.getPrototypeOf(customElements.get("ha-panel-lovelace"));
 const html = window.html || LitElementBase.prototype.html;
@@ -43,14 +43,16 @@ class SimplyThermostatCard extends LitElementBase {
     .header .name{ font-weight:700; font-size:1.06rem; line-height:1.22; }
     .header .meta{ font-size:0.92rem; color:#cfcfcf; line-height:1.35; white-space:pre-line; }
 
-    /* ⭕ วงกลมไอคอน: เท่า Mushroom (≈56px) */
+    /* ⭕ วงกลมไอคอน: เท่ากับ Mushroom (42px) */
     .icon-wrap{
-      width:56px; height:56px; display:grid; place-items:center; border-radius:50%;
+      width: var(--icon-size, 42px);
+      height: var(--icon-size, 42px);
+      display:grid; place-items:center; border-radius:50%;
       box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
       margin-top:-4px;
     }
 
-    /* Keyframes ตาม YAML */
+    /* Animations */
     @keyframes wobbling { 0%{transform:rotate(-80deg);} 100%{transform:rotate(40deg);} }
     @keyframes rotation { 0%{transform:rotate(0);} 100%{transform:rotate(360deg);} }
     @keyframes beat {
@@ -61,7 +63,6 @@ class SimplyThermostatCard extends LitElementBase {
       30%,39% { transform: scale(1.15); }
       33% { transform: scale(1.18); }
     }
-    /* fire: เลียนแบบเปลวไฟ (หมุน/ยืด/ทึบแสง) — ไม่เปลี่ยนสีใน keyframes เพื่อหลีกเลี่ยง css-tag error */
     @keyframes fire {
       0%   { transform: rotate(-2deg) scaleY(0.98); opacity:.9; }
       10%  { transform: rotate( 2deg) scaleY(1.02); opacity:1; }
@@ -80,14 +81,11 @@ class SimplyThermostatCard extends LitElementBase {
     .temp-value{ font-size:35px; color:#fff; font-weight:700; min-width:72px; text-align:center; }
     mwc-icon-button{ color:#9e9e9e; }
 
-    /* แถวปุ่มแบบบรรทัดเดียว (ไม่ห่อ) กินกว้างพอดี */
     .row{ display:flex; gap:12px; flex-wrap:nowrap; margin-top:8px; justify-content:space-between; }
     .row > *{ flex:1 1 0; }
-    .btn{
-      border-radius:10px; background:#2d2d2d; color:#9e9e9e; height:44px;
+    .btn{ border-radius:10px; background:#2d2d2d; color:#9e9e9e; height:44px;
       display:flex; align-items:center; justify-content:center; cursor:pointer;
-      min-width:0; padding:0 6px;
-    }
+      min-width:0; padding:0 6px; }
     .btn:hover{ background:#363636; color:#cfcfcf; }
     .btn.active.off{ background:#363636; color:#9e9e9e; }
     .btn.active.cool{ background:#1d3447; color:#2196f3; }
@@ -97,7 +95,6 @@ class SimplyThermostatCard extends LitElementBase {
     .btn.active.auto, .btn.active.heat_cool{ background:#263926; color:#4caf50; }
     .label{ font-size:.9rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 
-    /* Chips */
     .chips{ display:flex; align-items:center; justify-content:space-between; margin-top:6px; }
     .chips-left, .chips-right{ display:flex; gap:10px; align-items:center; }
     .chip{ display:inline-flex; align-items:center; gap:6px; background:transparent; color:#cfe7ff; font-size:.85rem; padding:2px 6px; border-radius:16px; cursor:default; }
@@ -108,7 +105,6 @@ class SimplyThermostatCard extends LitElementBase {
     .chip.yellow .icon{ color:#ffc107; }
     .chip.click{ cursor:pointer; }
 
-    /* Panels (bottom) */
     .panel{ margin:6px 8px 0; }
     .panel-row{ display:flex; gap:12px; flex-wrap:nowrap; justify-content:space-between; }
     .panel-row > *{ flex:1 1 0; }
@@ -362,7 +358,7 @@ class SimplyThermostatCard extends LitElementBase {
 try {
   if (typeof SimplyThermostatCard !== "undefined" && !customElements.get("simply-thermostat-card")) {
     customElements.define("simply-thermostat-card", SimplyThermostatCard);
-    console.info("✅ SimplyThermostatCard registered (v4.4 FULL)");
+    console.info("✅ SimplyThermostatCard registered (v4.5 FULL)");
   }
 } catch(e) {
   console.error("❌ Failed to define simply-thermostat-card:", e);
@@ -372,5 +368,5 @@ window.customCards = window.customCards || [];
 window.customCards.push({
   type:"simply-thermostat-card",
   name:"Simply Thermostat Card",
-  description:"All-in-one card with flexible rows, chips, and bottom panels. v4.4 FULL (mushroom-sized icon ring + YAML animations)"
+  description:"All-in-one card with mushroom-sized icon ring (42px), YAML animations, chips and panels. v4.5 FULL"
 });
