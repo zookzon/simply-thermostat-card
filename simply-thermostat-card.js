@@ -142,10 +142,10 @@ class SimplyThermostatCard extends LitElementBase {
     const actionMap = {off:"Off", cool:"Cooling", heat:"Heating", dry:"Drying", fan_only:"Fan", auto:"Auto", heat_cool:"Heat/Cool", idle:"Idle"};
     const actionText = actionMap[hvacMode] || "Idle";
 //    const meta = State: ${actionText}\n T: ${curT!=null?curT+"°C":"-"} | H: ${curH!=null?curH+"%":"-"}`;
-    const meta = `${actionText}`;
-    if(curT!=null && curH!=null) meta += `T: \n${curT}°C | H: ${curH}%`;
-    else if(curT!=null) meta += `T: \n${curT}°C`;
-    else if(curH!=null) meta += `H: \n${curH}%`;
+    let meta = `${actionText}`;
+    if(curT!=null && curH!=null) meta += `\nT: ${curT}°C | H: ${curH}%`;
+    else if(curT!=null) meta += `\nTemp: ${curT}°C`;
+    else if(curH!=null) meta += `\nHumi: ${curH}%`;
 
     const hvacModes = (st.attributes.hvac_modes||[]).slice();
     const fanModes = (st.attributes.fan_modes||[]).slice();
