@@ -42,6 +42,9 @@ class SimplyThermostatCard extends LitElementBase {
     .header{ display:flex; align-items:flex-start; gap:12px; }
     .header .name{ font-weight:700; font-size:1.06rem; line-height:1.22; }
     .header .meta{ font-size:0.92rem; color:#cfcfcf; line-height:1.35; white-space:pre-line; }
+    .btn.cyan.active { background:#164749; color:#00bcd4; }
+    .btn.yellow.active { background:#493516; color:#ffc107; }
+
 
     /* ⭕ วงกลมไอคอน: เท่ากับ Mushroom (36px) */
     .icon-wrap{
@@ -142,7 +145,7 @@ class SimplyThermostatCard extends LitElementBase {
     const actionMap = {off:"Off", cool:"Cooling", heat:"Heating", dry:"Drying", fan_only:"Fan", auto:"Auto", heat_cool:"Heat/Cool", idle:"Idle"};
     const actionText = actionMap[hvacMode] || "Idle";
 //    const meta = State: ${actionText}\n T: ${curT!=null?curT+"°C":"-"} | H: ${curH!=null?curH+"%":"-"}`;
-    let meta = `${actionText}`;
+    let meta = `State: ${actionText}`;
     if(curT!=null && curH!=null) meta += `\nT: ${curT}°C | H: ${curH}%`;
     else if(curT!=null) meta += `\nTemp: ${curT}°C`;
     else if(curH!=null) meta += `\nHumi: ${curH}%`;
@@ -186,7 +189,8 @@ class SimplyThermostatCard extends LitElementBase {
         ${rows.map(r=>r)}
         ${this._renderChips(st, {fanModes, swingModes, presetModes})}
         ${this._panelFan ? this._renderPanel("fan_mode", fanModes, st.attributes.fan_mode, fanIcon) : ""}
-        ${this._panelSwing ? this._renderPanel("swing_mode", swingModes, st.attributes.swing_mode, swingIcon) : ""}
+//        ${this._panelSwing ? this._renderPanel("swing_mode", swingModes, st.attributes.swing_mode, swingIcon) : ""}
+        ${this._panelSwing ? this._renderPanelText("swing_mode", swingModes, st.attributes.swing_mode, "yellow") : ""}
         ${this._panelPreset ? this._renderPanelText("preset_mode", presetModes, st.attributes.preset_mode) : ""}
       </ha-card>
     `;
@@ -275,10 +279,17 @@ class SimplyThermostatCard extends LitElementBase {
         <span class="chip purple click" @click=${()=>this._togglePanel("preset")} title="preset">
           ${st.attributes.preset_mode || "-"}
         </span>` : ""}
+/*
       ${ (this._config.show_swing==="chip" && swingModes.length) ? html`
         <span class="chip yellow click" @click=${()=>this._togglePanel("swing")} title="swing">
           <ha-icon class="icon" icon="${swingIcon(st.attributes.swing_mode)}"></ha-icon>${st.attributes.swing_mode || "-"}
         </span>` : ""}
+*/
+      ${ (this._config.show_swing==="chip" && swingModes.length) ? html`
+        <span class="chip yellow click" @click=${()=>this._togglePanel("swing")} title="swing">
+          ${st.attributes.swing_mode || "Swing"}
+        </span>` : ""}
+
       ${ (this._config.show_fan==="chip" && fanModes.length) ? html`
         <span class="chip green click" @click=${()=>this._togglePanel("fan")} title="fan">
           <ha-icon class="icon" icon="${fanIcon(st.attributes.fan_mode)}"></ha-icon>${st.attributes.fan_mode || "-"}
@@ -306,6 +317,7 @@ class SimplyThermostatCard extends LitElementBase {
       </div>
     `;
   }
+ /*
   _renderPanelText(type, list, current){
     if(!list || !list.length) return html``;
     return html`
@@ -322,6 +334,22 @@ class SimplyThermostatCard extends LitElementBase {
       </div>
     `;
   }
+*/
+_renderTextRow(type, list, current, color){
+  if(!list || !list.length) return html``;
+  return html`
+    <div class="row">
+      ${list.map(v=>{
+        const active = String(v)===String(current);
+        const cls = `btn ${color||""} ${active ? "active "+(color||"auto") : ""}`;
+        return html`
+          <div class="${cls}" title="${v}" @click=${()=>this._setOption(type, v)}>
+            <span class="label">${String(v).replaceAll("_"," ")}</span>
+          </div>`;
+      })}
+    </div>
+  `;
+}
 
   // Actions
   _togglePanel(which){
