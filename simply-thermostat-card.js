@@ -188,7 +188,7 @@ class SimplyThermostatCard extends LitElementBase {
 
         ${rows.map(r=>r)}
         ${this._renderChips(st, {
-    <!-- SWING MODE TEXT ROW -->
+    
     ${this._stateObj.attributes.swing_modes
       ? html`
           <div class="mode-row swing-row">
@@ -208,7 +208,7 @@ class SimplyThermostatCard extends LitElementBase {
         `
       : ''}
 
-    <!-- PRESET MODE TEXT ROW -->
+    
     ${this._stateObj.attributes.preset_modes
       ? html`
           <div class="mode-row preset-row">
