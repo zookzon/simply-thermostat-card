@@ -42,9 +42,6 @@ class SimplyThermostatCard extends LitElementBase {
     .header{ display:flex; align-items:flex-start; gap:12px; }
     .header .name{ font-weight:700; font-size:1.06rem; line-height:1.22; }
     .header .meta{ font-size:0.92rem; color:#cfcfcf; line-height:1.35; white-space:pre-line; }
-    .btn.cyan.active { background:#164749; color:#00bcd4; }
-    .btn.yellow.active { background:#493516; color:#ffc107; }
-
 
     /* ⭕ วงกลมไอคอน: เท่ากับ Mushroom (36px) */
     .icon-wrap{
@@ -113,6 +110,14 @@ class SimplyThermostatCard extends LitElementBase {
     .panel-row{ display:flex; gap:12px; flex-wrap:nowrap; justify-content:space-between; }
     .panel-row > *{ flex:1 1 0; }
     .panel .btn{ height:40px; }
+
+    .chip.yellow.click.active {
+      color: var(--warning-color, #FFD700) !important;
+    }
+
+    .chip.purple.click.active {
+      color: var(--info-color, #00FFFF) !important;
+    }
   `;}
 
   setConfig(c){
@@ -144,11 +149,7 @@ class SimplyThermostatCard extends LitElementBase {
     // Currently: แสดงตาม mode
     const actionMap = {off:"Off", cool:"Cooling", heat:"Heating", dry:"Drying", fan_only:"Fan", auto:"Auto", heat_cool:"Heat/Cool", idle:"Idle"};
     const actionText = actionMap[hvacMode] || "Idle";
-//    const meta = State: ${actionText}\n T: ${curT!=null?curT+"°C":"-"} | H: ${curH!=null?curH+"%":"-"}`;
-    let meta = `State: ${actionText}`;
-    if(curT!=null && curH!=null) meta += `\nT: ${curT}°C | H: ${curH}%`;
-    else if(curT!=null) meta += `\nTemp: ${curT}°C`;
-    else if(curH!=null) meta += `\nHumi: ${curH}%`;
+    const meta = `Currently: ${actionText}\nState: ${curT!=null?curT+"°C":"-"} | ${curH!=null?curH+"%":"-"}`;
 
     const hvacModes = (st.attributes.hvac_modes||[]).slice();
     const fanModes = (st.attributes.fan_modes||[]).slice();
@@ -187,51 +188,9 @@ class SimplyThermostatCard extends LitElementBase {
         </div>
 
         ${rows.map(r=>r)}
-        ${this._renderChips(st, {
-    
-    ${this._stateObj.attributes.swing_modes
-      ? html`
-          <div class="mode-row swing-row">
-            ${this._stateObj.attributes.swing_modes.map(
-              (m) => html`
-                <div
-                  class="chip swing-chip ${m === this._stateObj.attributes.swing_mode ? 'active' : ''}"
-                  style="${m === this._stateObj.attributes.swing_mode ? 'color:#FFD700' : ''}"
-                  @click=${() =>
-                    this._callService('set_swing_mode', { swing_mode: m })}
-                >
-                  ${m.toUpperCase()}
-                </div>
-              `
-            )}
-          </div>
-        `
-      : ''}
-
-    
-    ${this._stateObj.attributes.preset_modes
-      ? html`
-          <div class="mode-row preset-row">
-            ${this._stateObj.attributes.preset_modes.map(
-              (m) => html`
-                <div
-                  class="chip preset-chip ${m === this._stateObj.attributes.preset_mode ? 'active' : ''}"
-                  style="${m === this._stateObj.attributes.preset_mode ? 'color:#00FFFF' : ''}"
-                  @click=${() =>
-                    this._callService('set_preset_mode', { preset_mode: m })}
-                >
-                  ${m.toUpperCase()}
-                </div>
-              `
-            )}
-          </div>
-        `
-      : ''}
-
-fanModes, swingModes, presetModes})}
+        ${this._renderChips(st, {fanModes, swingModes, presetModes})}
         ${this._panelFan ? this._renderPanel("fan_mode", fanModes, st.attributes.fan_mode, fanIcon) : ""}
-//        ${this._panelSwing ? this._renderPanel("swing_mode", swingModes, st.attributes.swing_mode, swingIcon) : ""}
-        ${this._panelSwing ? this._renderPanelText("swing_mode", swingModes, st.attributes.swing_mode, "yellow") : ""}
+        ${this._panelSwing ? this._renderPanel("swing_mode", swingModes, st.attributes.swing_mode, swingIcon) : ""}
         ${this._panelPreset ? this._renderPanelText("preset_mode", presetModes, st.attributes.preset_mode) : ""}
       </ha-card>
     `;
@@ -317,20 +276,17 @@ fanModes, swingModes, presetModes})}
 
     const right = html`
       ${ (this._config.show_preset==="chip" && presetModes.length) ? html`
-        <span class="chip purple click" @click=${()=>this._togglePanel("preset")} title="preset">
-          ${st.attributes.preset_mode || "-"}
+        <span class="chip purple click ${this._panel==="preset"?"active":""}" 
+              style="${this._panel==="preset"?"color:#00FFFF":""}" 
+              @click=${()=>this._togglePanel("preset")} title="preset">
+          ${st.attributes.preset_mode ? st.attributes.preset_mode.toUpperCase() : "-"}
         </span>` : ""}
-/*
       ${ (this._config.show_swing==="chip" && swingModes.length) ? html`
-        <span class="chip yellow click" @click=${()=>this._togglePanel("swing")} title="swing">
-          <ha-icon class="icon" icon="${swingIcon(st.attributes.swing_mode)}"></ha-icon>${st.attributes.swing_mode || "-"}
+        <span class="chip yellow click ${this._panel==="swing"?"active":""}" 
+              style="${this._panel==="swing"?"color:#FFD700":""}" 
+              @click=${()=>this._togglePanel("swing")} title="swing">
+          ${st.attributes.swing_mode ? st.attributes.swing_mode.toUpperCase() : "-"}
         </span>` : ""}
-*/
-      ${ (this._config.show_swing==="chip" && swingModes.length) ? html`
-        <span class="chip yellow click" @click=${()=>this._togglePanel("swing")} title="swing">
-          ${st.attributes.swing_mode || "Swing"}
-        </span>` : ""}
-
       ${ (this._config.show_fan==="chip" && fanModes.length) ? html`
         <span class="chip green click" @click=${()=>this._togglePanel("fan")} title="fan">
           <ha-icon class="icon" icon="${fanIcon(st.attributes.fan_mode)}"></ha-icon>${st.attributes.fan_mode || "-"}
@@ -358,7 +314,6 @@ fanModes, swingModes, presetModes})}
       </div>
     `;
   }
- /*
   _renderPanelText(type, list, current){
     if(!list || !list.length) return html``;
     return html`
@@ -375,22 +330,6 @@ fanModes, swingModes, presetModes})}
       </div>
     `;
   }
-*/
-_renderTextRow(type, list, current, color){
-  if(!list || !list.length) return html``;
-  return html`
-    <div class="row">
-      ${list.map(v=>{
-        const active = String(v)===String(current);
-        const cls = `btn ${color||""} ${active ? "active "+(color||"auto") : ""}`;
-        return html`
-          <div class="${cls}" title="${v}" @click=${()=>this._setOption(type, v)}>
-            <span class="label">${String(v).replaceAll("_"," ")}</span>
-          </div>`;
-      })}
-    </div>
-  `;
-}
 
   // Actions
   _togglePanel(which){
@@ -444,11 +383,3 @@ window.customCards.push({
   name:"Simply Thermostat Card",
   description:"All-in-one card with mushroom-sized icon ring (36px), YAML animations, chips and panels. v4.9 FULL"
 });
-
-.swing-chip.active {
-  color: var(--warning-color, #FFD700) !important;
-}
-
-.preset-chip.active {
-  color: var(--info-color, #00FFFF) !important;
-}
