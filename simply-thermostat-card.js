@@ -124,10 +124,29 @@ class SimplyThermostatCard extends LitElementBase {
 
   }
   .panel-row .btn:hover{background:rgba(255,255,255,0.12);}
-  .panel-row .btn.active{font-weight:700;box-shadow:0 0 4px rgba(0,0,0,0.3);}
-  .panel.swing_mode .btn.active{background:linear-gradient(180deg,#FFD700,#B8860B);color:#222;}
-  .panel.preset_mode .btn.active{background:linear-gradient(180deg,#00FFFF,#0099CC);color:#111;}
-  
+  .panel-row .btn.active {
+    font-weight: 700;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08), 0 2px 4px rgba(0,0,0,0.3);
+    transition: all 0.25s ease;
+  }
+
+  /* 🔸 Swing (เหลืองทองเหมือน fan speed) */
+  .panel.swing_mode .btn.active {
+    background: #3A3320;
+    color: #FFD700;
+  }
+
+  /* 🔹 Preset (cyan cool tone เหมือน fan speed style) */
+  .panel.preset_mode .btn.active {
+    background: #123536;
+    color: #00FFFF;
+  }
+
+  /* Hover effect */
+  .panel-row .btn:hover {
+    filter: brightness(1.3);
+  }
+
   /* Chips active color indicator */
   .chip.purple.click.active{color:#00FFFF;}
   .chip.yellow.click.active{color:#FFD700;}
@@ -309,49 +328,43 @@ class SimplyThermostatCard extends LitElementBase {
  // Panels (bottom)
   _renderPanel(type, list, current, iconFn){
     if(!list || !list.length) return html``;
+    const isSwing = type === "swing_mode";
     return html`
       <div class="panel ${type}">
         <div class="panel-row">
           ${list.map(v=>{
-            const active = String(v)===String(current);
-            const ic = iconFn(String(v));
-            const isSwing = type==="swing_mode";
+            const active = String(v) === String(current);
+            const cls = `btn ${active?'active auto':''}`;
             return html`
-              <div class="btn ${active?'active auto':''}"
-                   style="${isSwing && active
-                     ? 'background:linear-gradient(180deg,#FFD700,#B8860B);color:#222;'
-                     : ''}"
-                   title="${v}"
+              <div class="${cls}" title="${v}"
                    @click=${()=>this._setOption(type,v)}>
-                ${isSwing ? String(v).toUpperCase()
-                          : html`<ha-icon icon="${ic}"></ha-icon>`}
+                ${String(v).toUpperCase()}
               </div>`;
           })}
         </div>
       </div>
     `;
   }
+
   _renderPanelText(type, list, current){
     if(!list || !list.length) return html``;
     return html`
       <div class="panel ${type}">
         <div class="panel-row">
           ${list.map(v=>{
-            const active = String(v)===String(current);
+            const active = String(v) === String(current);
+            const cls = `btn ${active?'active auto':''}`;
             return html`
-              <div class="btn ${active?'active auto':''}"
-                   style="${active && type==='preset_mode'
-                     ? 'background:linear-gradient(180deg,#00FFFF,#0099CC);color:#111;'
-                     : ''}"
-                   title="${v}"
+              <div class="${cls}" title="${v}"
                    @click=${()=>this._setOption(type,v)}>
-                <span class="label">${String(v).replaceAll('_',' ').toUpperCase()}</span>
+                ${String(v).replaceAll('_',' ').toUpperCase()}
               </div>`;
           })}
         </div>
       </div>
     `;
   }
+
 
   // Actions
   _togglePanel(which){
