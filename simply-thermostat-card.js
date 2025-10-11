@@ -124,29 +124,17 @@ class SimplyThermostatCard extends LitElementBase {
 
   }
   .panel-row .btn:hover{background:rgba(255,255,255,0.12);}
-  .panel-row .btn.active {
-    font-weight: 700;
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08), 0 2px 4px rgba(0,0,0,0.3);
-    transition: all 0.25s ease;
+  .panel-row .btn.active{font-weight:700;box-shadow:0 0 4px rgba(0,0,0,0.3);}
+  .panel.swing_mode .btn.active{
+    background:#3a3320;
+    color:#FFD700;
+  }
+  .panel.preset_mode .btn.active{
+    background:#0c2f31;
+    color:#00FFFF;
   }
 
-  /* 🔸 Swing (เหลืองทองเหมือน fan speed) */
-  .panel.swing_mode .btn.active {
-    background: #3A3320;
-    color: #FFD700;
-  }
-
-  /* 🔹 Preset (cyan cool tone เหมือน fan speed style) */
-  .panel.preset_mode .btn.active {
-    background: #123536;
-    color: #00FFFF;
-  }
-
-  /* Hover effect */
-  .panel-row .btn:hover {
-    filter: brightness(1.3);
-  }
-
+  
   /* Chips active color indicator */
   .chip.purple.click.active{color:#00FFFF;}
   .chip.yellow.click.active{color:#FFD700;}
@@ -333,10 +321,11 @@ class SimplyThermostatCard extends LitElementBase {
       <div class="panel ${type}">
         <div class="panel-row">
           ${list.map(v=>{
-            const active = String(v) === String(current);
+            const active = String(v)===String(current);
             const cls = `btn ${active?'active auto':''}`;
             return html`
               <div class="${cls}" title="${v}"
+                   style="${isSwing && active ? 'background:#3a3320;color:#FFD700;' : ''}"
                    @click=${()=>this._setOption(type,v)}>
                 ${String(v).toUpperCase()}
               </div>`;
@@ -352,10 +341,13 @@ class SimplyThermostatCard extends LitElementBase {
       <div class="panel ${type}">
         <div class="panel-row">
           ${list.map(v=>{
-            const active = String(v) === String(current);
+            const active = String(v)===String(current);
             const cls = `btn ${active?'active auto':''}`;
             return html`
               <div class="${cls}" title="${v}"
+                   style="${active && type==='preset_mode'
+                     ? 'background:#0c2f31;color:#00FFFF;'
+                     : ''}"
                    @click=${()=>this._setOption(type,v)}>
                 ${String(v).replaceAll('_',' ').toUpperCase()}
               </div>`;
@@ -364,7 +356,6 @@ class SimplyThermostatCard extends LitElementBase {
       </div>
     `;
   }
-
 
   // Actions
   _togglePanel(which){
