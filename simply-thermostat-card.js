@@ -110,15 +110,6 @@ class SimplyThermostatCard extends LitElementBase {
     .panel-row{ display:flex; gap:12px; flex-wrap:nowrap; justify-content:space-between; }
     .panel-row > *{ flex:1 1 0; }
     .panel .btn{ height:40px; }
-
-    .panel .btn.active[title^="swing"],
-    .panel.swing_mode .btn.active {
-      color: var(--warning-color, #FFD700) !important;
-    }
-    .panel .btn.active[title^="preset"],
-    .panel.preset_mode .btn.active {
-       color: var(--info-color, #00FFFF) !important;
-    }
   `;}
 
   setConfig(c){
@@ -277,16 +268,12 @@ class SimplyThermostatCard extends LitElementBase {
 
     const right = html`
       ${ (this._config.show_preset==="chip" && presetModes.length) ? html`
-        <span class="chip purple click ${this._panel==="preset"?"active":""}" 
-              style="${this._panel==="preset"?"color:#00FFFF":""}" 
-              @click=${()=>this._togglePanel("preset")} title="preset">
-          ${st.attributes.preset_mode ? st.attributes.preset_mode.toUpperCase() : "-"}
+        <span class="chip purple click" @click=${()=>this._togglePanel("preset")} title="preset">
+          ${st.attributes.preset_mode || "-"}
         </span>` : ""}
       ${ (this._config.show_swing==="chip" && swingModes.length) ? html`
-        <span class="chip yellow click ${this._panel==="swing"?"active":""}" 
-              style="${this._panel==="swing"?"color:#FFD700":""}" 
-              @click=${()=>this._togglePanel("swing")} title="swing">
-          ${st.attributes.swing_mode ? st.attributes.swing_mode.toUpperCase() : "-"}
+        <span class="chip yellow click" @click=${()=>this._togglePanel("swing")} title="swing">
+          <ha-icon class="icon" icon="${swingIcon(st.attributes.swing_mode)}"></ha-icon>${st.attributes.swing_mode || "-"}
         </span>` : ""}
       ${ (this._config.show_fan==="chip" && fanModes.length) ? html`
         <span class="chip green click" @click=${()=>this._togglePanel("fan")} title="fan">
@@ -297,22 +284,26 @@ class SimplyThermostatCard extends LitElementBase {
     return html`<div class="chips"><div class="chips-left">${left}</div><div class="chips-right">${right}</div></div>`;
   }
 
-  // Panels (bottom)
+ // Panels (bottom)
   _renderPanel(type, list, current, iconFn){
     if(!list || !list.length) return html``;
     return html`
-      <div class="panel">
+      <div class="panel ${type}">
         <div class="panel-row">
           ${list.map(v=>{
             const active = String(v)===String(current);
-            const cls = `btn ${active?'active auto':''}`;
             const ic = iconFn(String(v));
-            return html`<div class="${cls}" 
-              title="${v}" 
-              style="${active && type==='swing_mode' ? 'color:#FFD700' : ''}" 
-              @click=${()=>this._setOption(type, v)}>
-              ${type==='swing_mode' ? String(v).toUpperCase() : html`<ha-icon icon="${ic}"></ha-icon>`}
-            </div>`;
+            const isSwing = type==="swing_mode";
+            return html`
+              <div class="btn ${active?'active auto':''}"
+                   style="${isSwing && active
+                     ? 'background:linear-gradient(180deg,#FFD700,#B8860B);color:#222;'
+                     : ''}"
+                   title="${v}"
+                   @click=${()=>this._setOption(type,v)}>
+                ${isSwing ? String(v).toUpperCase()
+                          : html`<ha-icon icon="${ic}"></ha-icon>`}
+              </div>`;
           })}
         </div>
       </div>
@@ -321,17 +312,19 @@ class SimplyThermostatCard extends LitElementBase {
   _renderPanelText(type, list, current){
     if(!list || !list.length) return html``;
     return html`
-      <div class="panel">
+      <div class="panel ${type}">
         <div class="panel-row">
           ${list.map(v=>{
             const active = String(v)===String(current);
-            const cls = `btn ${active?'active auto':''}`;
-            return html`<div class="${cls}" 
-              title="${v}" 
-              style="${active && type==='preset_mode' ? 'color:#00FFFF' : ''}" 
-              @click=${()=>this._setOption(type, v)}>
-              <span class="label">${String(v).replaceAll("_"," ").toUpperCase()}</span>
-            </div>`;
+            return html`
+              <div class="btn ${active?'active auto':''}"
+                   style="${active && type==='preset_mode'
+                     ? 'background:linear-gradient(180deg,#00FFFF,#0099CC);color:#111;'
+                     : ''}"
+                   title="${v}"
+                   @click=${()=>this._setOption(type,v)}>
+                <span class="label">${String(v).replaceAll('_',' ').toUpperCase()}</span>
+              </div>`;
           })}
         </div>
       </div>
