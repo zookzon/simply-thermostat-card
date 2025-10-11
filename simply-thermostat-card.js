@@ -187,7 +187,48 @@ class SimplyThermostatCard extends LitElementBase {
         </div>
 
         ${rows.map(r=>r)}
-        ${this._renderChips(st, {fanModes, swingModes, presetModes})}
+        ${this._renderChips(st, {
+    <!-- SWING MODE TEXT ROW -->
+    ${this._stateObj.attributes.swing_modes
+      ? html`
+          <div class="mode-row swing-row">
+            ${this._stateObj.attributes.swing_modes.map(
+              (m) => html`
+                <div
+                  class="chip swing-chip ${m === this._stateObj.attributes.swing_mode ? 'active' : ''}"
+                  style="${m === this._stateObj.attributes.swing_mode ? 'color:#FFD700' : ''}"
+                  @click=${() =>
+                    this._callService('set_swing_mode', { swing_mode: m })}
+                >
+                  ${m.toUpperCase()}
+                </div>
+              `
+            )}
+          </div>
+        `
+      : ''}
+
+    <!-- PRESET MODE TEXT ROW -->
+    ${this._stateObj.attributes.preset_modes
+      ? html`
+          <div class="mode-row preset-row">
+            ${this._stateObj.attributes.preset_modes.map(
+              (m) => html`
+                <div
+                  class="chip preset-chip ${m === this._stateObj.attributes.preset_mode ? 'active' : ''}"
+                  style="${m === this._stateObj.attributes.preset_mode ? 'color:#00FFFF' : ''}"
+                  @click=${() =>
+                    this._callService('set_preset_mode', { preset_mode: m })}
+                >
+                  ${m.toUpperCase()}
+                </div>
+              `
+            )}
+          </div>
+        `
+      : ''}
+
+fanModes, swingModes, presetModes})}
         ${this._panelFan ? this._renderPanel("fan_mode", fanModes, st.attributes.fan_mode, fanIcon) : ""}
 //        ${this._panelSwing ? this._renderPanel("swing_mode", swingModes, st.attributes.swing_mode, swingIcon) : ""}
         ${this._panelSwing ? this._renderPanelText("swing_mode", swingModes, st.attributes.swing_mode, "yellow") : ""}
@@ -403,3 +444,11 @@ window.customCards.push({
   name:"Simply Thermostat Card",
   description:"All-in-one card with mushroom-sized icon ring (36px), YAML animations, chips and panels. v4.9 FULL"
 });
+
+.swing-chip.active {
+  color: var(--warning-color, #FFD700) !important;
+}
+
+.preset-chip.active {
+  color: var(--info-color, #00FFFF) !important;
+}
