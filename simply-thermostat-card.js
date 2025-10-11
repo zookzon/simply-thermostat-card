@@ -110,6 +110,24 @@ class SimplyThermostatCard extends LitElementBase {
     .panel-row{ display:flex; gap:12px; flex-wrap:nowrap; justify-content:space-between; }
     .panel-row > *{ flex:1 1 0; }
     .panel .btn{ height:40px; }
+
+  /* ==== Panel Buttons (Swing / Preset) ==== */
+  .panel-row .btn {
+    display:flex;align-items:center;justify-content:center;
+    width:42px;height:42px;margin:4px;border-radius:10px;
+    background:rgba(255,255,255,0.06);
+    color:var(--primary-text-color);font-weight:500;
+    transition:all .25s ease;text-transform:uppercase;cursor:pointer;
+  }
+  .panel-row .btn:hover{background:rgba(255,255,255,0.12);}
+  .panel-row .btn.active{font-weight:700;box-shadow:0 0 4px rgba(0,0,0,0.3);}
+  .panel.swing_mode .btn.active{background:linear-gradient(180deg,#FFD700,#B8860B);color:#222;}
+  .panel.preset_mode .btn.active{background:linear-gradient(180deg,#00FFFF,#0099CC);color:#111;}
+  
+  /* Chips active color indicator */
+  .chip.purple.click.active{color:#00FFFF;}
+  .chip.yellow.click.active{color:#FFD700;}
+
   `;}
 
   setConfig(c){
@@ -268,8 +286,10 @@ class SimplyThermostatCard extends LitElementBase {
 
     const right = html`
       ${ (this._config.show_preset==="chip" && presetModes.length) ? html`
-        <span class="chip purple click" @click=${()=>this._togglePanel("preset")} title="preset">
-          ${st.attributes.preset_mode || "-"}
+        <span class="chip purple click ${this._panelPreset?'active':''}"
+              style="${this._panelPreset?'color:#00FFFF;':''}"
+              @click=${()=>this._togglePanel("preset")} title="preset">
+          <ha-icon class="icon" icon="mdi:tune-variant"></ha-icon>${st.attributes.preset_mode || "-"}
         </span>` : ""}
       ${ (this._config.show_swing==="chip" && swingModes.length) ? html`
         <span class="chip yellow click" @click=${()=>this._togglePanel("swing")} title="swing">
