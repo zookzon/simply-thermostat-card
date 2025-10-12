@@ -111,32 +111,40 @@ class SimplyThermostatCard extends LitElementBase {
     .panel-row > *{ flex:1 1 0; }
     .panel .btn{ height:40px; }
 
-  /* ==== Panel Buttons (Swing / Preset) ==== */
   .panel-row .btn {
     font-weight:600;
     letter-spacing:0.5px;
-    text-transform:uppercase;
+    text-transform:lowercase;
     transition:all 0.25s ease;
+    border-radius:10px;
   }
   .panel-row .btn:hover {
     filter:brightness(1.2);
   }
 
+  .panel-row .btn.active {
+    font-weight:700;
+    box-shadow:none;
   }
-  .panel-row .btn:hover{background:rgba(255,255,255,0.12);}
-  .panel-row .btn.active{font-weight:700;box-shadow:0 0 4px rgba(0,0,0,0.3);}
-  .panel.swing_mode .btn.active{
-    background:#3a3320;
+
+  /* ✅ Swing Mode Style (เหมือน fan speed) */
+  .row.swing_mode .btn.active,
+  .panel.swing_mode .btn.active {
+    background:#2b2614;
     color:#FFD700;
   }
-  .panel.preset_mode .btn.active{
-    background:#0c2f31;
+
+  /* ✅ Preset Mode Style (eco cyan) */
+  .row.preset_mode .btn.active,
+  .panel.preset_mode .btn.active {
+    background:#142825;
     color:#00FFFF;
   }
-  
+
   /* Chips active color indicator */
   .chip.purple.click.active{color:#00FFFF;}
   .chip.yellow.click.active{color:#FFD700;}
+
 
   `;}
 
@@ -258,13 +266,20 @@ class SimplyThermostatCard extends LitElementBase {
   }
   _renderIconRow(type, list, current, iconFn){
     if(!list || !list.length) return html``;
+    const isSwing = type === "swing_mode";
+    const isPreset = type === "preset_mode";
     return html`
-      <div class="row">
+      <div class="row ${type}">
         ${list.map(v=>{
-          const active = String(v)===String(current);
+          const active = String(v) === String(current);
           const cls = `btn ${active?'active auto':''}`;
-          const ic = iconFn(String(v));
-          return html`<div class="${cls}" title="${v}" @click=${()=>this._setOption(type, v)}><ha-icon icon="${ic}"></ha-icon></div>`;
+          return html`
+            <div class="${cls}" title="${v}"
+                 @click=${()=>this._setOption(type,v)}>
+              ${isSwing || isPreset
+                ? html`<span class="label">${String(v).replaceAll('_',' ').toLowerCase()}</span>`
+                : html`<ha-icon icon="${iconFn(String(v))}"></ha-icon>`}
+            </div>`;
         })}
       </div>
     `;
@@ -312,31 +327,27 @@ class SimplyThermostatCard extends LitElementBase {
     return html`<div class="chips"><div class="chips-left">${left}</div><div class="chips-right">${right}</div></div>`;
   }
 
- // Panels (bottom)
+  // Panels (bottom)
   _renderPanel(type, list, current, iconFn){
     if(!list || !list.length) return html``;
+    const isSwing = type === "swing_mode";
     return html`
       <div class="panel ${type}">
         <div class="panel-row">
           ${list.map(v=>{
             const active = String(v)===String(current);
-            const ic = iconFn(String(v));
-            const isSwing = type==="swing_mode";
+            const cls = `btn ${active?'active auto':''}`;
             return html`
-              <div class="btn ${active?'active auto':''}"
-                   style="${isSwing && active
-                     ? 'background:#3a3320;color:#FFD700;'
-                     : ''}"
-                   title="${v}"
+              <div class="${cls}" title="${v}"
                    @click=${()=>this._setOption(type,v)}>
-                ${isSwing ? String(v).toUpperCase()
-                          : html`<ha-icon icon="${ic}"></ha-icon>`}
+                <span class="label">${String(v).replaceAll('_',' ').toLowerCase()}</span>
               </div>`;
           })}
         </div>
       </div>
     `;
   }
+
   _renderPanelText(type, list, current){
     if(!list || !list.length) return html``;
     return html`
@@ -344,20 +355,18 @@ class SimplyThermostatCard extends LitElementBase {
         <div class="panel-row">
           ${list.map(v=>{
             const active = String(v)===String(current);
+            const cls = `btn ${active?'active auto':''}`;
             return html`
-              <div class="btn ${active?'active auto':''}"
-                   style="${active && type==='preset_mode'
-                     ? 'background:#0c2f31;color:#00FFFF;'
-                     : ''}"
-                   title="${v}"
+              <div class="${cls}" title="${v}"
                    @click=${()=>this._setOption(type,v)}>
-                <span class="label">${String(v).replaceAll('_',' ').toUpperCase()}</span>
+                <span class="label">${String(v).replaceAll('_',' ').toLowerCase()}</span>
               </div>`;
           })}
         </div>
       </div>
     `;
   }
+
 
   // Actions
   _togglePanel(which){
