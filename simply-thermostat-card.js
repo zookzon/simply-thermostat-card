@@ -1,10 +1,10 @@
-console.info("%c Simply Thermostat Card (v6) loaded", "color: lime; font-weight: bold");
+console.info("%c Simply Thermostat Card (v7) loaded", "color: lime; font-weight: bold");
 
 const LitElementBase = window.LitElement || Object.getPrototypeOf(customElements.get("ha-panel-lovelace"));
 const html = window.html || LitElementBase.prototype.html;
 const css = window.css || LitElementBase.prototype.css;
 
-/** ===== Icons / Colors ===== */
+/* ===== Icons / Colors ===== */
 const MODE_ICONS = {
   off:"mdi:power", cool:"mdi:snowflake", heat:"mdi:fire", dry:"mdi:water-percent",
   fan_only:"mdi:fan", auto:"mdi:autorenew", heat_cool:"mdi:autorenew"
@@ -31,14 +31,13 @@ function swingIcon(mode){
   return "mdi:swap-vertical";
 }
 
-/** ===== Card ===== */
-class SimplyThermostatCardV6 extends LitElementBase {
+/* ===== Card ===== */
+class SimplyThermostatCard extends LitElementBase {
   static get properties(){ return {
     hass:{attribute:false}, _config:{attribute:false},
-    _panelFan:{type:Boolean}, _panelSwing:{type:Boolean}, _panelPreset:{type:Boolean},
+    _panelFan:{type:Boolean}, _panelSwing:{type:Boolean}, _panelPreset:{type:Boolean}
   };}
 
-  /** ===== Styles (Style A) ===== */
   static get styles(){ return css`
     ha-card{ background:var(--ha-card-background,#1f1f1f); border-radius:12px; padding:12px; }
 
@@ -98,7 +97,7 @@ class SimplyThermostatCardV6 extends LitElementBase {
     .btn .label{ font-size:.9rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
     .btn ha-icon{ --mdc-icon-size: 22px; }
 
-    /* Active colors (match YAML style) */
+    /* Active colors (match your YAML style) */
     .btn.active.off{ background:#363636; color:#9e9e9e; }
     .btn.active.cool{ background:#1d3447; color:#2196f3; }
     .btn.active.heat{ background:#472421; color:#f44336; }
@@ -106,38 +105,26 @@ class SimplyThermostatCardV6 extends LitElementBase {
     .btn.active.fan_only{ background:#493516; color:#ff9800; }
     .btn.active.auto, .btn.active.heat_cool{ background:#263926; color:#4caf50; }
 
-    /* Fan speed active (green tone to keep consistent look) */
-    .row.fan_mode .btn.active,
-    .panel.fan_mode .btn.active{
-      background:#263926; color:#4caf50;
-    }
+    .row.fan_mode .btn.active, .panel.fan_mode .btn.active{ background:#263926; color:#4caf50; }
+    .row.swing_mode .btn.active, .panel.swing_mode .btn.active{ background:#3a3320; color:#FFD700; }
+    .row.preset_mode .btn.active, .panel.preset_mode .btn.active{ background:#142825; color:#00FFFF; }
 
-    /* Swing/Preset active in the same "fan speed" style family */
-    .row.swing_mode .btn.active,
-    .panel.swing_mode .btn.active{ background:#3a3320; color:#FFD700; } /* yellow tone */
-    .row.preset_mode .btn.active,
-    .panel.preset_mode .btn.active{ background:#142825; color:#00FFFF; } /* cyan eco */
-
-    /* Chips */
-    .chips{ display:flex; align-items:center; justify-content:space-between; margin-top:10px; }
-    .chips-left, .chips-right{ display:flex; gap:10px; align-items:center; }
+    /* Chips (centered) */
+    .chips{ display:flex; align-items:center; justify-content:center; margin-top:10px; }
+    .chips .chip-list{ display:flex; gap:12px; align-items:center; }
     .chip{
       display:inline-flex; align-items:center; gap:6px;
-      background:transparent; color:#cfe7ff; font-size:.85rem;
-      padding:2px 8px; border-radius:16px; cursor:default;
+      background:transparent; color:#cfe7ff; font-size:.9rem;
+      padding:2px 8px; border-radius:16px; cursor:pointer;
     }
     .chip .icon{ color:#00bcd4; }
-    .chip.blue .icon{ color:#2196f3; }
     .chip.green .icon{ color:#4caf50; }
-    .chip.purple .icon{ color:#1BCACC; }
     .chip.yellow .icon{ color:#ffc107; }
-    .chip.click{ cursor:pointer; }
-    .chip.click:hover{ filter:brightness(1.15); }
-
-    /* Active tint on chips when its panel is open */
-    .chip.purple.click.active{ color:#00FFFF; }
-    .chip.yellow.click.active{ color:#FFD700; }
-    .chip.green.click.active{ color:#4caf50; }
+    .chip.purple .icon{ color:#1BCACC; }
+    .chip:hover{ filter:brightness(1.15); }
+    .chip.active.green{ color:#4caf50; }
+    .chip.active.yellow{ color:#FFD700; }
+    .chip.active.purple{ color:#00FFFF; }
 
     /* Panels under the card (when toggled by chips) */
     .panel{ margin-top:6px; }
@@ -146,54 +133,50 @@ class SimplyThermostatCardV6 extends LitElementBase {
     .panel .btn{ height:40px; }
   `;}
 
-  /** ===== Config ===== */
   setConfig(c){
     if(!c || !c.entity) throw new Error("Entity is required");
     this._config = {
       entity: c.entity,
       name: c.name,
-      // show_*: true|false|'chip'
-      show_hvac:   (c.show_hvac   ?? true),
-      show_fan:    (c.show_fan    ?? true),
-      show_swing:  (c.show_swing  ?? true),
-      show_preset: (c.show_preset ?? true),
-      // optional: custom icon size
-      icon_size:   (c.icon_size ?? 36),
-      step:        Number(c.step ?? 1),
+      // true | 'chip' | false
+      show_hvac:   c.show_hvac   ?? true,
+      show_fan:    c.show_fan    ?? true,
+      show_swing:  c.show_swing  ?? true,
+      show_preset: c.show_preset ?? true,
+      step: Number(c.step ?? 1),
+      icon_size: c.icon_size ?? 36
     };
     this._panelFan=false; this._panelSwing=false; this._panelPreset=false;
   }
 
-  /** ===== Render ===== */
   render(){
     const st = this.hass?.states?.[this._config.entity];
     if(!st) return html`<ha-card><div style="color:#888">Entity not found: ${this._config.entity}</div></ha-card>`;
 
     const hvacMode = st.state;
-    const friendly = this._config.name || (st.attributes.friendly_name || this._config.entity);
     const icon = MODE_ICONS[hvacMode] || "mdi:thermostat";
     const color = MODE_COLORS[hvacMode] || MODE_COLORS.off;
     const bgColor = this._softBg(color);
 
-    const curT = st.attributes.current_temperature;
-    const curH = st.attributes.current_humidity != null ? Math.round(st.attributes.current_humidity) : undefined;
+    const friendly = st.attributes.friendly_name || this._config.entity;
+    const t = st.attributes.current_temperature;
+    const h = st.attributes.current_humidity!=null ? Math.round(st.attributes.current_humidity) : undefined;
     const target = st.attributes.temperature ?? st.attributes.target_temperature ?? "-";
-
-    const actionMap = {off:"Off", cool:"Cooling", heat:"Heating", dry:"Drying", fan_only:"Fan", auto:"Auto", heat_cool:"Heat/Cool", idle:"Idle"};
-    const actionText = actionMap[hvacMode] || "Idle";
-    const meta = `Currently: ${actionText}\nState: ${curT!=null?curT+"°C":"-"} | ${curH!=null?curH+"%":"-"}`;
-
     const hvacModes   = (st.attributes.hvac_modes||[]).slice();
     const fanModes    = (st.attributes.fan_modes||[]).slice();
     const swingModes  = (st.attributes.swing_modes||[]).slice();
     const presetModes = (st.attributes.preset_modes||[]).slice();
 
-    // Build rows from top to bottom according to config
+    const actionMap = {off:"Off", cool:"Cooling", heat:"Heating", dry:"Drying", fan_only:"Fan", auto:"Auto", heat_cool:"Heat/Cool", idle:"Idle"};
+    const actionText = actionMap[hvacMode] || "Idle";
+    const meta = `State:  ${actionText}\nT: ${t!=null?Number(t).toFixed(1)+"°C":"-"} | H: ${h!=null?h+"%":"-"}`;
+
+    // build rows (top → bottom)
     const rows = [];
-    if(this._config.show_hvac===true && hvacModes.length)        rows.push(this._rowHVAC(hvacModes, hvacMode));
-    if(this._config.show_fan===true  && fanModes.length)         rows.push(this._rowFan("fan_mode", fanModes, st.attributes.fan_mode));
-    if(this._config.show_swing===true && swingModes.length)      rows.push(this._rowText("swing_mode", swingModes, st.attributes.swing_mode, "swing_mode"));
-    if(this._config.show_preset===true && presetModes.length)    rows.push(this._rowText("preset_mode", presetModes, st.attributes.preset_mode, "preset_mode"));
+    if(this._config.show_hvac===true && hvacModes.length) rows.push(this._rowHVAC(hvacModes, hvacMode));
+    if(this._config.show_fan===true && fanModes.length) rows.push(this._rowFan("fan_mode", fanModes, st.attributes.fan_mode));
+    if(this._config.show_swing===true && swingModes.length) rows.push(this._rowText("swing_mode", swingModes, st.attributes.swing_mode, "swing_mode"));
+    if(this._config.show_preset===true && presetModes.length) rows.push(this._rowText("preset_mode", presetModes, st.attributes.preset_mode, "preset_mode"));
 
     const animStyle = this._animStyle(hvacMode);
 
@@ -202,13 +185,15 @@ class SimplyThermostatCardV6 extends LitElementBase {
         <div class="grid2">
           <div class="header">
             <div class="icon-wrap">
-              <ha-icon class="${this._iconAnimClass(hvacMode)}" style="color:${color}; ${animStyle}" .icon=${icon}></ha-icon>
+              <ha-icon style="color:${color}; ${animStyle}" .icon=${icon}></ha-icon>
             </div>
             <div>
               <div class="name">${friendly}</div>
               <div class="meta">${meta}</div>
             </div>
           </div>
+
+          <!-- Temp control at right-center -->
           <div class="vcenter">
             <mwc-icon-button title="Decrease" @click=${()=>this._adjustTemp(-this._config.step)}>
               <ha-icon icon="mdi:minus"></ha-icon>
@@ -222,7 +207,7 @@ class SimplyThermostatCardV6 extends LitElementBase {
 
         ${rows.map(r=>r)}
 
-        ${this._renderChips(st, {hvacModes, fanModes, swingModes, presetModes})}
+        ${this._renderChips(st, {fanModes, swingModes, presetModes})}
 
         ${this._panelFan    ? this._panel("fan_mode",    fanModes,    st.attributes.fan_mode,    true) : ""}
         ${this._panelSwing  ? this._panel("swing_mode",  swingModes,  st.attributes.swing_mode,  false, "swing_mode") : ""}
@@ -231,14 +216,7 @@ class SimplyThermostatCardV6 extends LitElementBase {
     `;
   }
 
-  /** ===== Animations (same as YAML) ===== */
-  _iconAnimClass(mode){
-    if(mode==="cool") return "anim-cool";
-    if(mode==="heat") return "anim-heat";
-    if(mode==="fan_only"||mode==="auto"||mode==="heat_cool") return "anim-rotate";
-    if(mode==="dry") return "anim-beat";
-    return "";
-  }
+  /* ===== Animations (YAML parity) ===== */
   _animStyle(mode){
     switch(mode){
       case "cool": return "animation: wobbling 0.7s linear infinite alternate; animation-duration: 1s;";
@@ -251,7 +229,7 @@ class SimplyThermostatCardV6 extends LitElementBase {
     }
   }
 
-  /** ===== Rows ===== */
+  /* ===== Rows ===== */
   _rowHVAC(list, current){
     if(!list || !list.length) return html``;
     return html`
@@ -282,11 +260,10 @@ class SimplyThermostatCardV6 extends LitElementBase {
       </div>
     `;
   }
-  _rowText(type, list, current, kind /* 'swing_mode' | 'preset_mode' */){
+  _rowText(type, list, current, kind){
     if(!list || !list.length) return html``;
-    const rowCls = `row ${kind}`;
     return html`
-      <div class="${rowCls}">
+      <div class="row ${kind}">
         ${list.map(v=>{
           const active = String(v)===String(current);
           const cls = `btn ${active?'active auto':''}`;
@@ -298,48 +275,39 @@ class SimplyThermostatCardV6 extends LitElementBase {
     `;
   }
 
-  /** ===== Chips & Panels ===== */
-  _renderChips(st, {hvacModes, fanModes, swingModes, presetModes}){
-    // chips-left: temperature / humidity
-    const curT = st.attributes.current_temperature;
-    const curH = st.attributes.current_humidity != null ? Math.round(st.attributes.current_humidity) : undefined;
-
-    const left = html`
-      <span class="chip blue"><ha-icon class="icon" icon="mdi:thermometer"></ha-icon>${curT!=null?`${curT}°C`:"-"}</span>
-      <span class="chip"><ha-icon class="icon" icon="mdi:water"></ha-icon>${curH!=null?`${curH}%`:"-"}</span>
-    `;
-
-    // chips-right: per config === 'chip'
-    const right = html`
-      ${ (this._config.show_preset==="chip" && presetModes.length) ? html`
-        <span class="chip purple click ${this._panelPreset?'active':''}" @click=${()=>this._togglePanel("preset")} title="preset">
-          <ha-icon class="icon" icon="mdi:tune-variant"></ha-icon>${st.attributes.preset_mode || "-"}
-        </span>` : ""}
-      ${ (this._config.show_swing==="chip" && swingModes.length) ? html`
-        <span class="chip yellow click ${this._panelSwing?'active':''}" @click=${()=>this._togglePanel("swing")} title="swing">
-          <ha-icon class="icon" icon="${swingIcon(st.attributes.swing_mode)}"></ha-icon>${st.attributes.swing_mode || "-"}
-        </span>` : ""}
-      ${ (this._config.show_fan==="chip" && fanModes.length) ? html`
-        <span class="chip green click ${this._panelFan?'active':''}" @click=${()=>this._togglePanel("fan")} title="fan">
-          <ha-icon class="icon" icon="${fanIcon(st.attributes.fan_mode)}"></ha-icon>${st.attributes.fan_mode || "-"}
-        </span>` : ""}
-    `;
-    // (optional) hvac chip — ทำได้ แต่ตามสเปกเรายังไม่ต้อง show_hvac=chip (ถ้าต้องการค่อยเพิ่ม)
-
-    return html`<div class="chips"><div class="chips-left">${left}</div><div class="chips-right">${right}</div></div>`;
+  /* ===== Chips (center aligned) ===== */
+  _renderChips(st, {fanModes, swingModes, presetModes}){
+    const chips = [];
+    if(this._config.show_preset==="chip" && presetModes.length){
+      chips.push(html`<span class="chip purple ${this._panelPreset?'active':''}" @click=${()=>this._togglePanel("preset")} title="preset">
+        <ha-icon class="icon" icon="mdi:tune-variant"></ha-icon>${st.attributes.preset_mode || "-"}
+      </span>`);
+    }
+    if(this._config.show_swing==="chip" && swingModes.length){
+      chips.push(html`<span class="chip yellow ${this._panelSwing?'active':''}" @click=${()=>this._togglePanel("swing")} title="swing">
+        <ha-icon class="icon" icon="${swingIcon(st.attributes.swing_mode)}"></ha-icon>${st.attributes.swing_mode || "-"}
+      </span>`);
+    }
+    if(this._config.show_fan==="chip" && fanModes.length){
+      chips.push(html`<span class="chip green ${this._panelFan?'active':''}" @click=${()=>this._togglePanel("fan")} title="fan">
+        <ha-icon class="icon" icon="${fanIcon(st.attributes.fan_mode)}"></ha-icon>${st.attributes.fan_mode || "-"}
+      </span>`);
+    }
+    if(!chips.length) return html``;
+    return html`<div class="chips"><div class="chip-list">${chips.map(c=>c)}</div></div>`;
   }
 
+  /* ===== Panels (for chips) ===== */
   _panel(type, list, current, useIcons=false, kind=null){
     if(!list || !list.length) return html``;
-    // if kind given -> "swing_mode"/"preset_mode" for row styling
-    const panelCls = `panel ${kind || type}`;
+    const cls = `panel ${kind||type}`;
     return html`
-      <div class="${panelCls}">
+      <div class="${cls}">
         <div class="panel-row">
           ${list.map(v=>{
             const active = String(v)===String(current);
-            const cls = `btn ${active?'active auto':''}`;
-            return html`<div class="${cls}" title="${v}" @click=${()=>this._setOption(type, v)}>
+            const bcls = `btn ${active?'active auto':''}`;
+            return html`<div class="${bcls}" title="${v}" @click=${()=>this._setOption(type, v)}>
               ${useIcons ? html`<ha-icon icon="${fanIcon(String(v))}"></ha-icon>`
                          : html`<span class="label">${String(v).replaceAll("_"," ").toLowerCase()}</span>`}
             </div>`;
@@ -349,7 +317,7 @@ class SimplyThermostatCardV6 extends LitElementBase {
     `;
   }
 
-  /** ===== Actions / Services ===== */
+  /* ===== Actions ===== */
   _togglePanel(which){
     this._panelFan   = which==="fan"    ? !this._panelFan    : false;
     this._panelSwing = which==="swing"  ? !this._panelSwing  : false;
@@ -360,8 +328,7 @@ class SimplyThermostatCardV6 extends LitElementBase {
     const st=this.hass.states[this._config.entity];
     const cur=Number(st.attributes.temperature??st.attributes.target_temperature);
     if(Number.isFinite(cur)){
-      const next = cur + delta;
-      this.hass.callService("climate","set_temperature",{entity_id:this._config.entity,temperature:next});
+      this.hass.callService("climate","set_temperature",{entity_id:this._config.entity,temperature:cur+delta});
     }
   }
   _setMode(m){ this.hass.callService("climate","set_hvac_mode",{entity_id:this._config.entity,hvac_mode:m}); }
@@ -372,7 +339,7 @@ class SimplyThermostatCardV6 extends LitElementBase {
   }
   getCardSize(){ return 3; }
 
-  /** ===== Utils ===== */
+  /* ===== Utils ===== */
   _softBg(color){
     try{
       if(color && color[0]==="#"){
@@ -386,20 +353,20 @@ class SimplyThermostatCardV6 extends LitElementBase {
   }
 }
 
-/** ===== Define element ===== */
+/* ===== Safe define (element name must stay the same) ===== */
 try {
   if (!customElements.get("simply-thermostat-card")) {
-    customElements.define("simply-thermostat-card", SimplyThermostatCardV6);
-    console.info("✅ Simply Thermostat Card registered (v6)");
+    customElements.define("simply-thermostat-card", SimplyThermostatCard);
+    console.info("✅ Simply Thermostat Card registered (v7)");
   }
 } catch(e) {
   console.error("❌ Failed to define simply-thermostat-card:", e);
 }
 
-/** ===== Registry (for HA card picker) ===== */
+/* ===== Registry (HA card picker) ===== */
 window.customCards = window.customCards || [];
 window.customCards.push({
   type:"simply-thermostat-card",
   name:"Simply Thermostat Card",
-  description:"Style A thermostat: 4 rows (HVAC/Fan/Swing/Preset), chip toggles, YAML-like animations, v6."
+  description:"Virtual AC style: header state, right-centered temp control, 4 rows (HVAC/Fan/Swing/Preset), chip toggles."
 });
