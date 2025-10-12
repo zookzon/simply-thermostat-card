@@ -133,7 +133,6 @@ class SimplyThermostatCard extends LitElementBase {
     background:#0c2f31;
     color:#00FFFF;
   }
-
   
   /* Chips active color indicator */
   .chip.purple.click.active{color:#00FFFF;}
@@ -316,25 +315,28 @@ class SimplyThermostatCard extends LitElementBase {
  // Panels (bottom)
   _renderPanel(type, list, current, iconFn){
     if(!list || !list.length) return html``;
-    const isSwing = type === "swing_mode";
     return html`
       <div class="panel ${type}">
         <div class="panel-row">
           ${list.map(v=>{
             const active = String(v)===String(current);
-            const cls = `btn ${active?'active auto':''}`;
+            const ic = iconFn(String(v));
+            const isSwing = type==="swing_mode";
             return html`
-              <div class="${cls}" title="${v}"
-                   style="${isSwing && active ? 'background:#3a3320;color:#FFD700;' : ''}"
+              <div class="btn ${active?'active auto':''}"
+                   style="${isSwing && active
+                     ? 'background:#3a3320;color:#FFD700;'
+                     : ''}"
+                   title="${v}"
                    @click=${()=>this._setOption(type,v)}>
-                ${String(v).toUpperCase()}
+                ${isSwing ? String(v).toUpperCase()
+                          : html`<ha-icon icon="${ic}"></ha-icon>`}
               </div>`;
           })}
         </div>
       </div>
     `;
   }
-
   _renderPanelText(type, list, current){
     if(!list || !list.length) return html``;
     return html`
@@ -342,14 +344,14 @@ class SimplyThermostatCard extends LitElementBase {
         <div class="panel-row">
           ${list.map(v=>{
             const active = String(v)===String(current);
-            const cls = `btn ${active?'active auto':''}`;
             return html`
-              <div class="${cls}" title="${v}"
+              <div class="btn ${active?'active auto':''}"
                    style="${active && type==='preset_mode'
                      ? 'background:#0c2f31;color:#00FFFF;'
                      : ''}"
+                   title="${v}"
                    @click=${()=>this._setOption(type,v)}>
-                ${String(v).replaceAll('_',' ').toUpperCase()}
+                <span class="label">${String(v).replaceAll('_',' ').toUpperCase()}</span>
               </div>`;
           })}
         </div>
