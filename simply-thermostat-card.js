@@ -169,7 +169,19 @@ class SimplyThermostatCard extends LitElementBase {
 
     const actionMap = {off:"Off", cool:"Cooling", heat:"Heating", dry:"Drying", fan_only:"Fan", auto:"Auto", heat_cool:"Heat/Cool", idle:"Idle"};
     const actionText = actionMap[hvacMode] || "Idle";
-    const meta = `State:  ${actionText}\nT: ${t!=null?Number(t).toFixed(1)+"°C":"-"} | H: ${h!=null?h+"%":"-"}`;
+    // ✅ แสดงค่า temp/humi ตามเงื่อนไขจริง
+    let meta = `State:  ${actionText}`;
+    const hasTemp = st.attributes.current_temperature != null;
+    const hasHumi = st.attributes.current_humidity != null;
+
+    if (hasTemp && hasHumi) {
+      meta += `\nT: ${Number(st.attributes.current_temperature).toFixed(1)}°C | H: ${Math.round(st.attributes.current_humidity)}%`;
+    } else if (hasTemp) {
+      meta += `\nT: ${Number(st.attributes.current_temperature).toFixed(1)}°C`;
+    } else if (hasHumi) {
+      meta += `\nH: ${Math.round(st.attributes.current_humidity)}%`;
+    }
+    // else → ไม่มีทั้งคู่ → ไม่เพิ่มบรรทัด T/H เลย
 
     // build rows (top → bottom)
     const rows = [];
