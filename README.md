@@ -20,7 +20,7 @@ Designed for standard `climate.*` entities including ESPHome, Zigbee2MQTT, Local
 - Home Assistant theme variables and light/dark theme support
 - Keyboard-accessible native buttons and ARIA labels
 - Responsive mobile layout
-- Home Assistant Sections default layout of 4 columns
+- Home Assistant Sections default layout of 4 columns with automatic row height
 - Built-in visual card editor
 - Card picker registration and `climate` entity suggestion
 - No dependency on `mwc-*` controls or Home Assistant's internal Lit implementation
@@ -47,7 +47,7 @@ resources:
     type: module
 ```
 
-Then hard-refresh the browser. The console should report `Simply Thermostat Card registered v2.0.1`.
+Then hard-refresh the browser. The console should report `Simply Thermostat Card registered v2.0.4`.
 
 ## Configuration
 
@@ -85,6 +85,10 @@ A control is also omitted when the selected climate entity does not expose the c
 
 Fan controls are generated from the entity's own `fan_modes`. Standard speed entries are numbered according to their order, so an entity exposing four normal speeds receives levels 1–4 and an entity exposing seven receives levels 1–7. Special modes such as Auto, Off, Quiet/Silent/Sleep and Turbo/Powerful/Boost use dedicated icons instead of a numeric level.
 
+## Home Assistant Sections layout
+
+The card requests a standard width of 4 columns and automatic row height. Expanded chip panels therefore use the card's natural content height instead of a fixed Sections row count.
+
 ## Climate behavior
 
 The entity state is treated as the selected HVAC mode, while `hvac_action` is used for the current operating state. This means an inverter AC can correctly show `State: Idle` while its selected HVAC mode remains `cool`.
@@ -107,4 +111,4 @@ The original design was inspired by Mushroom-style thermostat layouts and Simple
 
 See [CHANGELOG.md](CHANGELOG.md) for full details.
 
-Current development release: **v2.0.1**.
+Current development release: **v2.0.4**.
