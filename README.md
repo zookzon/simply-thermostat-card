@@ -26,7 +26,8 @@ The compact chips expand only when needed, keeping the normal card small while p
 - Adaptive fan-speed controls based on each entity's `fan_modes`
 - Dynamic fan levels for 4-speed, 7-speed and other fan configurations
 - Fan → Swing → Preset chip ordering
-- Distinct active colors: Fan green, Swing gold, Preset cyan
+- Distinct active HVAC colors: Cool blue, Heat red, Dry yellow, Fan Only cyan, Auto green, Heat/Cool purple and Off gray
+- Distinct active control colors: Fan green, Swing gold, Preset cyan
 - Current temperature and humidity display when provided by the entity
 - Real operating state from `hvac_action` (for example Cooling vs Idle)
 - Animated HVAC icon with reduced-motion support
@@ -42,7 +43,7 @@ The compact chips expand only when needed, keeping the normal card small while p
 
 ## What's new in v2
 
-**v2.0.6 includes the improvements developed throughout v2.0.0–v2.0.5**, so users installing the current release receive all of the changes below.
+**v2.0.7 includes the improvements developed throughout v2.0.0–v2.0.6**, so users installing the current release receive all of the changes below.
 
 ### v2.0.0 — Modernization
 - Rebuilt the card as a native Web Component for better compatibility with modern Home Assistant.
@@ -72,10 +73,17 @@ The compact chips expand only when needed, keeping the normal card small while p
 - Uses a **4-column minimum and 1-row minimum** as the standard baseline.
 - Expandable controls can increase the card's natural height so cards below are moved down instead of being overlapped.
 
-### v2.0.6 — Current release
+### v2.0.6 — Non-Commercial License
 - Includes all v2.0.0–v2.0.5 functionality and layout improvements.
 - First release under the **Simply Thermostat Card Non-Commercial License 1.0**.
 - No intentional card behavior or layout changes from v2.0.5.
+
+### v2.0.7 — HVAC mode colors
+- Added distinct active colors for all standard HVAC modes.
+- Cool = blue, Heat = red, Dry = yellow, Fan Only = cyan, Auto = green, Heat/Cool = purple, Off = gray.
+- Active HVAC buttons use a stronger 28% mode-color background mix for clearer feedback.
+- Inactive HVAC buttons keep the existing Home Assistant theme colors unchanged.
+- No layout or climate-control behavior changes from v2.0.6.
 
 For detailed development history, see [CHANGELOG.md](CHANGELOG.md).
 
@@ -101,7 +109,7 @@ resources:
     type: module
 ```
 
-Then hard-refresh the browser. The console should report `Simply Thermostat Card registered v2.0.6`.
+Then hard-refresh the browser. The console should report `Simply Thermostat Card registered v2.0.7`.
 
 ## Configuration
 
@@ -134,6 +142,20 @@ show_preset: chip
 ```
 
 A control is also omitted when the selected climate entity does not expose the corresponding mode list.
+
+## HVAC mode colors
+
+Inactive HVAC buttons continue to use the Home Assistant theme's existing secondary background and text colors. Only the currently active mode receives its mode color and tinted background.
+
+| HVAC mode | Active color |
+| --- | --- |
+| Off | Gray |
+| Cool | Blue |
+| Heat | Red |
+| Dry | Yellow |
+| Fan Only | Cyan |
+| Auto | Green |
+| Heat/Cool | Purple |
 
 ## Fan modes
 
@@ -177,4 +199,4 @@ The original design was inspired by Mushroom-style thermostat layouts and Simple
 
 See [CHANGELOG.md](CHANGELOG.md) for full details.
 
-Current release: **v2.0.6**.
+Current release: **v2.0.7**.
