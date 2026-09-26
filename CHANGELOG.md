@@ -2,6 +2,15 @@
 
 All notable changes to **Simply Thermostat Card** are documented here.
 
+## [v2.0.7] — 2026-09-26
+
+### Changed
+- Added distinct colors for active HVAC mode buttons.
+- Cool uses blue, Heat uses red, Dry uses yellow, Fan Only uses cyan, Auto uses green, Heat/Cool uses purple, and Off uses gray.
+- Active HVAC buttons now use a stronger 28% mode-color background mix for clearer visual feedback.
+- Inactive HVAC buttons keep the existing Home Assistant theme styling unchanged.
+- No layout, Fan, Swing, Preset, or climate-control behavior changes are intended.
+
 ## [v2.0.6] — 2026-09-26
 
 ### Licensing
