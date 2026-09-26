@@ -2,31 +2,6 @@
 
 All notable changes to **Simply Thermostat Card** are documented here.
 
-## [v2.0.3] — 2026-09-26
-
-### Fixed
-- Fixed intermittent overlap when expanding Fan, Swing, Preset or HVAC chip panels in Home Assistant Sections dashboards.
-- Removed the `rows` value from `getGridOptions()` so Home Assistant ignores fixed grid rows and lets the card use its natural content height, as required by the Home Assistant custom-card sizing API.
-- Expanded panels now grow the card naturally and push following cards down instead of drawing over them.
-
-### Preserved
-- Default width remains 4 columns with a 4-column minimum.
-- Responsive expanded-panel wrapping for large fan-mode lists.
-- Adaptive fan-speed controls, Fan → Swing → Preset order, and legacy control colors.
-
-## [v2.0.2] — 2026-09-26
-
-### Fixed
-- Home Assistant Sections cards now request automatic row height so expanded chip panels can increase the card height instead of overlapping the card below.
-- Expanded Fan, Swing, Preset and HVAC panels use a responsive 4-column grid.
-- Large fan-mode lists such as 7-speed AC units wrap onto additional rows instead of being compressed into one row.
-- Very narrow displays fall back to a 3-column expanded-panel grid.
-
-### Preserved
-- Default card width remains 4 columns with a 4-column minimum.
-- Adaptive fan-speed numbering and special fan-mode icons from v2.0.1.
-- Fan → Swing → Preset chip order and legacy Fan/Swing/Preset colors.
-
 ## [v2.0.1] — 2026-09-26
 
 ### Changed
