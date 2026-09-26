@@ -62,7 +62,7 @@ resources:
     type: module
 ```
 
-Then hard-refresh the browser. The console should report `Simply Thermostat Card registered v2.0.5`.
+Then hard-refresh the browser. The console should report `Simply Thermostat Card registered v2.0.6`.
 
 ## Configuration
 
@@ -118,19 +118,19 @@ v2 uses a native Web Component implementation. It intentionally avoids `mwc-icon
 
 ## License
 
-New versions of Simply Thermostat Card are distributed under the **Simply Thermostat Card Non-Commercial License 1.0**.
+Starting with **v2.0.6**, Simply Thermostat Card is distributed under the **Simply Thermostat Card Non-Commercial License 1.0**.
 
 You may use, copy, modify, fork and redistribute the project for personal and other non-commercial purposes. Commercial use, resale, inclusion in paid products/services, or other revenue-generating use requires prior written permission from the copyright holder.
 
 Internal use by a business or organization for its own non-revenue-generating Home Assistant dashboard is permitted under the license.
 
-**Important:** versions previously released under the MIT License remain available under the MIT terms that applied to those versions. The non-commercial restriction applies to new versions and modifications first published under the new license. See [LICENSE](LICENSE) for the complete terms.
+**Important:** v2.0.5 and versions previously released under the MIT License remain available under the MIT terms that applied to those versions. The non-commercial restriction applies to v2.0.6 and later versions first published under the new license. See [LICENSE](LICENSE) for the complete terms.
 
 ## Credits
 
 **Author:** Kamui Shirou / zookzon  
 **Project:** Simply Thermostat Card  
-**License:** Simply Thermostat Card Non-Commercial License 1.0
+**License:** Simply Thermostat Card Non-Commercial License 1.0 (v2.0.6+)
 
 The original design was inspired by Mushroom-style thermostat layouts and Simple Thermostat concepts. v2 preserves the original Simply Thermostat interaction model while modernizing its Home Assistant frontend integration.
 
@@ -138,4 +138,4 @@ The original design was inspired by Mushroom-style thermostat layouts and Simple
 
 See [CHANGELOG.md](CHANGELOG.md) for full details.
 
-Current development release: **v2.0.5**.
+Current release: **v2.0.6**.

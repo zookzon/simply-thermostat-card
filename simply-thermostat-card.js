@@ -1,4 +1,4 @@
-const STC_VERSION = "2.0.5";
+const STC_VERSION = "2.0.6";
 console.info(`%c Simply Thermostat Card v${STC_VERSION} loaded`, "color:#4caf50;font-weight:bold");
 
 const MODE_ICONS={off:"mdi:power",cool:"mdi:snowflake",heat:"mdi:fire",dry:"mdi:water-percent",fan_only:"mdi:fan",auto:"mdi:autorenew",heat_cool:"mdi:autorenew"};
