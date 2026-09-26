@@ -1,4 +1,4 @@
-const STC_VERSION = "2.0.4";
+const STC_VERSION = "2.0.5";
 console.info(`%c Simply Thermostat Card v${STC_VERSION} loaded`, "color:#4caf50;font-weight:bold");
 
 const MODE_ICONS={off:"mdi:power",cool:"mdi:snowflake",heat:"mdi:fire",dry:"mdi:water-percent",fan_only:"mdi:fan",auto:"mdi:autorenew",heat_cool:"mdi:autorenew"};
@@ -19,7 +19,7 @@ class SimplyThermostatCard extends HTMLElement{
  static getStubConfig(hass){const entity=Object.keys(hass?.states||{}).find(e=>e.startsWith("climate."));return entity?{entity,show_hvac:true,show_fan:"chip",show_swing:"chip",show_preset:"chip"}:{};}
  static async getConfigElement(){return document.createElement("simply-thermostat-card-editor");}
  getCardSize(){return 3;}
- getGridOptions(){return{columns:4,min_columns:4,rows:"auto"};}
+ getGridOptions(){return{columns:"full",min_columns:4,rows:"auto",min_rows:1};}
  _render(){
   if(!this.shadowRoot||!this._config||!this._hass)return;
   const st=this._hass.states?.[this._config.entity];if(!st){this.shadowRoot.innerHTML=`<ha-card><div style="padding:16px;color:var(--secondary-text-color)">Entity not found: ${esc(this._config.entity)}</div></ha-card>`;return;}
