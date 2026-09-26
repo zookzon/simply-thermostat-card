@@ -42,7 +42,7 @@ jobs:
             const js = fs.readFileSync("simply-thermostat-card.js", "utf8");
             const readme = fs.readFileSync("README.md", "utf8");
             const changelog = fs.readFileSync("CHANGELOG.md", "utf8");
-            const m = js.match(/STC_VERSION\s*=\s*["'\x60]([^"'\x60]+)["'\x60]/);
+            const m = js.match(/STC_VERSION\s*=\s*"([^"]+)"/);
             if (!m) throw new Error("STC_VERSION not found");
             const version = m[1];
             if (!readme.includes(`v${version}`)) throw new Error(`README does not mention v${version}`);
