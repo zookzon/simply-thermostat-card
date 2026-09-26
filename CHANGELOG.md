@@ -2,6 +2,21 @@
 
 All notable changes to **Simply Thermostat Card** are documented here.
 
+## [v2.0.5] — 2026-09-26
+
+### Fixed
+- Set the Home Assistant Sections defaults to the layout verified to prevent expandable panels from overlapping cards below.
+- Default Sections layout now requests `columns: "full"` and `rows: "auto"`.
+
+### Changed
+- Full width is enabled by default for new card layouts.
+- Auto height is enabled by default so Fan, Swing, Preset and HVAC chip panels can expand the card naturally.
+- The layout keeps a 4-column minimum and 1-row minimum, matching the intended 1×4 baseline layout.
+- Precise/fixed sizing is not requested by the card defaults.
+
+### Note
+- Existing dashboard cards can retain layout values previously saved by Home Assistant. If an older card still has fixed sizing, enable Auto height and Full width in its Layout settings.
+
 ## [v2.0.4] — 2026-09-26
 
 ### Fixed
