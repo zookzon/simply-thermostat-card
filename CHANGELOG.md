@@ -2,6 +2,19 @@
 
 All notable changes to **Simply Thermostat Card** are documented here.
 
+## [v2.0.6] — 2026-09-26
+
+### Licensing
+- First release under the **Simply Thermostat Card Non-Commercial License 1.0**.
+- Personal, educational, research, hobby and other non-commercial use remains permitted.
+- Non-commercial modification, forking and redistribution remain permitted subject to the license terms.
+- Commercial use requires prior written permission from the copyright holder.
+- Versions previously released under the MIT License remain licensed under the MIT terms that applied to those versions.
+
+### Changed
+- Updated the runtime version to `2.0.6`.
+- No intentional card behavior or layout changes from v2.0.5.
+
 ## [v2.0.5] — 2026-09-26
 
 ### Fixed
