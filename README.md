@@ -20,7 +20,7 @@ Designed for standard `climate.*` entities including ESPHome, Zigbee2MQTT, Local
 - Home Assistant theme variables and light/dark theme support
 - Keyboard-accessible native buttons and ARIA labels
 - Responsive mobile layout
-- Home Assistant Sections default layout of 4 columns with automatic row height
+- Home Assistant Sections default layout: Full width, Auto height, 1-row minimum and 4-column minimum
 - Built-in visual card editor
 - Card picker registration and `climate` entity suggestion
 - No dependency on `mwc-*` controls or Home Assistant's internal Lit implementation
@@ -47,7 +47,7 @@ resources:
     type: module
 ```
 
-Then hard-refresh the browser. The console should report `Simply Thermostat Card registered v2.0.4`.
+Then hard-refresh the browser. The console should report `Simply Thermostat Card registered v2.0.5`.
 
 ## Configuration
 
@@ -87,7 +87,9 @@ Fan controls are generated from the entity's own `fan_modes`. Standard speed ent
 
 ## Home Assistant Sections layout
 
-The card requests a standard width of 4 columns and automatic row height. Expanded chip panels therefore use the card's natural content height instead of a fixed Sections row count.
+The default Sections layout requests **Full width** and **Auto height**, with a 4-column minimum and 1-row minimum. This matches the layout needed for expandable Fan, Swing, Preset and HVAC chip panels: when a panel opens, the card can grow naturally and cards below it are moved down instead of being overlapped.
+
+Existing dashboard cards may retain layout values previously saved by Home Assistant. If an older card still uses a fixed layout, open its Layout settings and enable Auto height and Full width.
 
 ## Climate behavior
 
@@ -111,4 +113,4 @@ The original design was inspired by Mushroom-style thermostat layouts and Simple
 
 See [CHANGELOG.md](CHANGELOG.md) for full details.
 
-Current development release: **v2.0.4**.
+Current development release: **v2.0.5**.
