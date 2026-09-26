@@ -4,7 +4,7 @@ console.info(`%c Simply Thermostat Card v${STC_VERSION} loaded`, "color:#4caf50;
 const MODE_ICONS={off:"mdi:power",cool:"mdi:snowflake",heat:"mdi:fire",dry:"mdi:water-percent",fan_only:"mdi:fan",auto:"mdi:autorenew",heat_cool:"mdi:autorenew"};
 const MODE_COLORS={off:"#9e9e9e",cool:"#2196f3",heat:"#f44336",dry:"#fbc02d",fan_only:"#00bcd4",auto:"#4caf50",heat_cool:"#9c27b0"};
 const ACTION_LABELS={off:"Off",idle:"Idle",cooling:"Cooling",heating:"Heating",drying:"Drying",fan:"Fan",defrosting:"Defrosting",preheating:"Preheating"};
-const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;","&gt;":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const label=v=>String(v??"-").replaceAll("_"," ");
 const norm=v=>String(v??"").toLowerCase().replace(/[\s_-]+/g,"");
 const FAN_SPECIAL=new Set(["auto","automatic","off","quiet","silent","sleep","turbo","powerful","boost"]);
