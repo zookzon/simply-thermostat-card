@@ -116,11 +116,21 @@ Temperature adjustment uses the entity's `target_temp_step` unless `step` is exp
 
 v2 uses a native Web Component implementation. It intentionally avoids `mwc-icon-button` and does not derive LitElement from Home Assistant private frontend elements. Standard Home Assistant elements such as `ha-card` and `ha-icon` are used for presentation.
 
+## License
+
+New versions of Simply Thermostat Card are distributed under the **Simply Thermostat Card Non-Commercial License 1.0**.
+
+You may use, copy, modify, fork and redistribute the project for personal and other non-commercial purposes. Commercial use, resale, inclusion in paid products/services, or other revenue-generating use requires prior written permission from the copyright holder.
+
+Internal use by a business or organization for its own non-revenue-generating Home Assistant dashboard is permitted under the license.
+
+**Important:** versions previously released under the MIT License remain available under the MIT terms that applied to those versions. The non-commercial restriction applies to new versions and modifications first published under the new license. See [LICENSE](LICENSE) for the complete terms.
+
 ## Credits
 
 **Author:** Kamui Shirou / zookzon  
 **Project:** Simply Thermostat Card  
-**License:** MIT
+**License:** Simply Thermostat Card Non-Commercial License 1.0
 
 The original design was inspired by Mushroom-style thermostat layouts and Simple Thermostat concepts. v2 preserves the original Simply Thermostat interaction model while modernizing its Home Assistant frontend integration.
 
