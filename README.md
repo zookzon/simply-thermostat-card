@@ -11,7 +11,7 @@ Designed for standard `climate.*` entities including ESPHome, Zigbee2MQTT, Local
 - Adaptive fan-speed controls based on each entity's `fan_modes`
 - Dynamic fan levels for 4-speed, 7-speed and other fan configurations
 - Responsive expanded panels that wrap large mode lists
-- Automatic row height in Home Assistant Sections dashboards
+- Natural content height in Home Assistant Sections dashboards so expanded panels push following cards down
 - Fan → Swing → Preset chip ordering
 - Distinct active colors: Fan green, Swing gold, Preset cyan
 - Current temperature and humidity display when provided by the entity
@@ -35,7 +35,7 @@ Add this repository to HACS as a Dashboard custom repository, install **Simply T
 
 ### Manual
 
-Copy `simply-thermostat-card.js` to `/config/www/community/simply-thermostat-card/simply-thermostat-card.js` and add it as a module resource. After updating, hard-refresh the browser. The console should report `Simply Thermostat Card registered v2.0.2`.
+Copy `simply-thermostat-card.js` to `/config/www/community/simply-thermostat-card/simply-thermostat-card.js` and add it as a module resource. After updating, hard-refresh the browser. The console should report `Simply Thermostat Card registered v2.0.3`.
 
 ## Configuration
 
@@ -73,7 +73,7 @@ A control is omitted when the selected climate entity does not expose the corres
 
 Fan controls are generated from the entity's own `fan_modes`. Standard speed entries are numbered according to their order, so an entity exposing four normal speeds receives levels 1–4 and an entity exposing seven receives levels 1–7. Special modes such as Auto, Off, Quiet/Silent/Sleep and Turbo/Powerful/Boost use dedicated icons instead of a numeric level.
 
-Expanded control panels use a four-column responsive grid. Large mode lists wrap onto additional rows, and Home Assistant Sections dashboards use automatic row height so expanded controls remain inside the card instead of overlapping the card below.
+Expanded control panels use a four-column responsive grid. Large mode lists wrap onto additional rows. In Home Assistant Sections, the card intentionally does not define a fixed row count, allowing Home Assistant to use the card's natural content height as panels expand and collapse.
 
 ## Climate behavior
 
@@ -97,4 +97,4 @@ The original design was inspired by Mushroom-style thermostat layouts and Simple
 
 See [CHANGELOG.md](CHANGELOG.md) for full details.
 
-Current development release: **v2.0.2**.
+Current development release: **v2.0.3**.
