@@ -4,6 +4,21 @@ A compact, modern custom climate card for Home Assistant.
 
 Designed for standard `climate.*` entities including ESPHome, Zigbee2MQTT, LocalTuya, IR gateways and virtual AC integrations. It provides HVAC, fan, swing and preset controls in one responsive card while automatically hiding unsupported capabilities.
 
+## Preview
+
+<table>
+  <tr>
+    <td align="center"><strong>Default</strong><br><img src="images/card-default.jpg" alt="Simply Thermostat Card default view" width="360"></td>
+    <td align="center"><strong>Fan controls</strong><br><img src="images/card-fan-controls.jpg" alt="Simply Thermostat Card fan controls" width="360"></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Swing controls</strong><br><img src="images/card-swing-controls.jpg" alt="Simply Thermostat Card swing controls" width="360"></td>
+    <td align="center"><strong>Preset controls</strong><br><img src="images/card-preset-controls.jpg" alt="Simply Thermostat Card preset controls" width="360"></td>
+  </tr>
+</table>
+
+The compact chips expand only when needed, keeping the normal card small while providing quick access to Fan, Swing and Preset options.
+
 ## Features
 
 - HVAC, fan, swing and preset controls
