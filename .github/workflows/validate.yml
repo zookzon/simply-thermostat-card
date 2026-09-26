@@ -1,0 +1,59 @@
+name: Validate
+
+on:
+  push:
+    branches:
+      - main
+      - v2-modernization
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Check JavaScript syntax
+        run: node --check simply-thermostat-card.js
+
+      - name: Validate hacs.json
+        run: |
+          node -e '
+            const fs = require("fs");
+            const h = JSON.parse(fs.readFileSync("hacs.json", "utf8"));
+            if (h.name !== "Simply Thermostat Card") throw new Error("Unexpected HACS name");
+            if (h.filename !== "simply-thermostat-card.js") throw new Error("HACS filename must be simply-thermostat-card.js");
+            if (!fs.existsSync(h.filename)) throw new Error(`Missing ${h.filename}`);
+          '
+
+      - name: Check version consistency
+        run: |
+          node -e '
+            const fs = require("fs");
+            const js = fs.readFileSync("simply-thermostat-card.js", "utf8");
+            const readme = fs.readFileSync("README.md", "utf8");
+            const changelog = fs.readFileSync("CHANGELOG.md", "utf8");
+            const m = js.match(/STC_VERSION\s*=\s*["'\x60]([^"'\x60]+)["'\x60]/);
+            if (!m) throw new Error("STC_VERSION not found");
+            const version = m[1];
+            if (!readme.includes(`v${version}`)) throw new Error(`README does not mention v${version}`);
+            if (!changelog.includes(`[v${version}]`)) throw new Error(`CHANGELOG does not contain [v${version}]`);
+            console.log(`Version consistency OK: v${version}`);
+          '
+
+      - name: Check required repository files
+        run: |
+          test -s README.md
+          test -s CHANGELOG.md
+          test -s LICENSE
+          test -s hacs.json
+          test -s simply-thermostat-card.js
