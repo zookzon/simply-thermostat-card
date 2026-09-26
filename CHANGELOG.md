@@ -2,6 +2,19 @@
 
 All notable changes to **Simply Thermostat Card** are documented here.
 
+## [v2.0.4] — 2026-09-26
+
+### Fixed
+- Restored the v2.0.1 implementation as the code baseline after the unsuccessful v2.0.2/v2.0.3 layout experiments.
+- Home Assistant Sections now requests `rows: "auto"` together with the standard 4-column width so expandable chip panels can use automatic row height.
+
+### Preserved from v2.0.1
+- 4-column default Sections width.
+- Adaptive fan-speed controls for 4-speed, 7-speed and other fan configurations.
+- Fan → Swing → Preset chip ordering.
+- Normal font weight for expanded Fan, Swing and Preset options.
+- Fan green, Swing gold and Preset cyan active colors.
+
 ## [v2.0.1] — 2026-09-26
 
 ### Changed
