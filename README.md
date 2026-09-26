@@ -1,133 +1,101 @@
 # Simply Thermostat Card
 
-A custom Lovelace card for Home Assistant — built for **Virtual AC / IR Climate entities**  
-with a design inspired by *Mushroom Template* and *Simple Thermostat*.
+A compact, modern custom climate card for Home Assistant.
 
-It provides a modern, unified thermostat control card  
-with full control over HVAC, Fan, Swing, and Preset modes — in a single beautiful layout.
+Designed for standard `climate.*` entities including ESPHome, Zigbee2MQTT, LocalTuya, IR gateways and virtual AC integrations. It provides HVAC, fan, swing and preset controls in one responsive card while automatically hiding unsupported capabilities.
 
----
+## Features
 
-## ✨ Features
+- HVAC, fan, swing and preset controls
+- `true`, `chip`, or `false` visibility for each control group
+- Current temperature and humidity display when provided by the entity
+- Real operating state from `hvac_action` (for example Cooling vs Idle)
+- Animated HVAC icon with reduced-motion support
+- Automatic `target_temp_step` support
+- Automatic `min_temp` / `max_temp` protection
+- Home Assistant theme variables and light/dark theme support
+- Keyboard-accessible native buttons and ARIA labels
+- Responsive mobile layout
+- Built-in visual card editor
+- Card picker registration and `climate` entity suggestion
+- No dependency on `mwc-*` controls or Home Assistant's internal Lit implementation
 
-✅ **Modern Virtual AC layout**
+## Installation
 
-✅ **4 interactive control rows:**
-- HVAC Mode  
-- Fan Speed  
-- Swing Mode  
-- Preset Mode  
+### HACS custom repository
 
-✅ **Smart T/H Display**
-- If both Temp and Humidity exist → show both  
-  → `T: 25°C | H: 46%`
-- If only one exists → show that value  
-- If none exist → hide the line completely
+Add this repository to HACS as a Dashboard custom repository, install **Simply Thermostat Card**, then reload Home Assistant/frontend resources.
 
-✅ **Configurable Visibility**
-Each mode row can be:
-- `true` → always visible  
-- `chip` → hidden in a toggle chip  
-- `false` → completely disabled  
+### Manual
 
-```yaml
-show_hvac: true | chip | false
-show_fan: true | chip | false
-show_swing: true | chip | false
-show_preset: true | chip | false
+Copy `simply-thermostat-card.js` to:
+
+```text
+/config/www/community/simply-thermostat-card/simply-thermostat-card.js
 ```
 
-✅ **Animated HVAC Icon**
-- `cool`: wobbling ❄️  
-- `heat`: fire 🔥  
-- `fan_only` / `auto`: rotation 🔄  
-- `dry`: heartbeat 💧  
+Add the resource:
 
-✅ **Centered Chips Panel**
-- Fan, Swing, and Preset chips shown in the middle bottom  
-- Tap to expand panels with selectable modes
+```yaml
+resources:
+  - url: /local/community/simply-thermostat-card/simply-thermostat-card.js
+    type: module
+```
 
-✅ **Mushroom-style colors & shadows**
+Then hard-refresh the browser. The console should report `Simply Thermostat Card registered v2.0.0`.
 
----
+## Configuration
 
-## 🧩 Installation
-
-1. Copy the JS file to:
-   ```
-   /config/www/community/simply-thermostat-card/simply-thermostat-card-v7.1.js
-   ```
-
-2. Add to Lovelace resources:
-   ```yaml
-   resources:
-     - url: /local/community/simply-thermostat-card/simply-thermostat-card-v7.1.js
-       type: module
-   ```
-
-3. Refresh browser cache (`Ctrl+F5`)  
-   You should see in console:
-   ```
-   ✅ Simply Thermostat Card registered (v7.1)
-   ```
-
----
-
-## ⚙️ Example Configuration
+The card can be configured from the Home Assistant visual editor or YAML.
 
 ```yaml
 type: custom:simply-thermostat-card
-entity: climate.virtual_ac_5
+entity: climate.living_room
 show_hvac: true
 show_fan: chip
 show_swing: chip
 show_preset: false
-step: 1
 ```
 
----
+Optional settings:
 
-## 🎨 Color Theme
+```yaml
+name: Living Room
+step: 0.5       # omit to use entity target_temp_step, then fallback to 1
+icon_size: 36
+```
 
-| Mode | Background | Text/Icon |
-|------|-------------|-----------|
-| off | #363636 | #9e9e9e |
-| cool | #1d3447 | #2196f3 |
-| heat | #472421 | #f44336 |
-| dry | #164749 | #1BCACC |
-| fan_only | #493516 | #ff9800 |
-| auto / heat_cool | #263926 | #4caf50 |
+Visibility values:
 
----
+```yaml
+show_hvac: true     # always visible
+show_fan: chip      # compact chip that expands controls
+show_swing: false   # hidden
+show_preset: chip
+```
 
-## 🧠 Notes
+A control is also omitted when the selected climate entity does not expose the corresponding mode list.
 
-- Works with all `climate.*` entities  
-  (Zigbee2MQTT, ESPHome, LocalTuya, IR Gateway, etc.)
-- Fully responsive design  
-- Animations match YAML-based Mushroom Template styles  
-- The element name **must remain**:
-  ```
-  type: custom:simply-thermostat-card
-  ```
-  (Do not rename!)
+## Climate behavior
 
----
+The entity state is treated as the selected HVAC mode, while `hvac_action` is used for the current operating state. This means an inverter AC can correctly show `State: Idle` while its selected HVAC mode remains `cool`.
 
-## 🧑‍💻 Credits
+Temperature adjustment uses the entity's `target_temp_step` unless `step` is explicitly configured. Values are clamped to `min_temp` and `max_temp` before `climate.set_temperature` is called.
 
-**Author:** Kamui Shirou  
-**Coded & optimized by:** ChatGPT-5 (October 2025)  
-**Framework:** LitElement  
-**License:** MIT  
+## Compatibility
 
----
+v2.0.0 uses a native Web Component implementation. It intentionally avoids `mwc-icon-button` and does not derive LitElement from Home Assistant private frontend elements. Standard Home Assistant elements such as `ha-card` and `ha-icon` are used for presentation.
 
-## 🕓 Versions
+## Credits
 
-| Version | Date | Summary |
-|----------|------|----------|
-| v7.1 | 2025-10-12 | Smart T/H display + Final Virtual AC layout |
-| v7.0 | 2025-10-11 | New layout rewrite (Virtual AC style) |
-| v6.x | 2025-10-10 | Legacy Simply Thermostat with full chip toggle |
-| v5.x | 2025-09-30 | Original Mushroom-based version |
+**Author:** Kamui Shirou / zookzon  
+**Project:** Simply Thermostat Card  
+**License:** MIT
+
+The original design was inspired by Mushroom-style thermostat layouts and Simple Thermostat concepts. v2 preserves the original Simply Thermostat interaction model while modernizing its Home Assistant frontend integration.
+
+## Version history
+
+See [CHANGELOG.md](CHANGELOG.md) for full details.
+
+Current development release: **v2.0.0**.
