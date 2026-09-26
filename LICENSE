@@ -1,21 +1,54 @@
-MIT License
+Simply Thermostat Card Non-Commercial License 1.0
 
 Copyright (c) 2025-2026 Kamui Shirou / zookzon
+All rights reserved except as expressly granted below.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+IMPORTANT VERSION NOTICE
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+Versions of Simply Thermostat Card that were previously released under the MIT License remain licensed under the MIT License for those versions. This license applies to new versions and modifications first published by the copyright holder under this license after the license change.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+1. Permission
+
+Subject to the terms of this license, permission is granted, free of charge, to any person obtaining a copy of the software and associated documentation files (the "Software") to:
+
+- use the Software for personal, educational, research, hobby, and other non-commercial purposes;
+- copy and redistribute the Software for non-commercial purposes;
+- modify, fork, and create derivative works from the Software for non-commercial purposes; and
+- contribute modifications back to the project.
+
+2. Non-Commercial Restriction
+
+The Software, modified versions, and derivative works may not be used for Commercial Purposes without prior written permission from the copyright holder.
+
+"Commercial Purposes" includes, without limitation:
+
+- selling, licensing, renting, or charging a fee for the Software or a derivative work;
+- including the Software or a derivative work in a paid product, paid package, paid installation, subscription, hosted service, or other revenue-generating offering;
+- using the Software primarily to provide paid services to third parties; or
+- removing the Software's non-commercial restriction and redistributing it under terms that permit commercial use.
+
+Use of the Software by a business or organization solely for its own internal, non-revenue-generating Home Assistant dashboard is permitted, provided the Software itself is not sold, sublicensed for a fee, or used to provide a paid service to third parties.
+
+3. Redistribution and Attribution
+
+Any copy, substantial portion, modified version, or derivative work distributed under this license must:
+
+- retain this copyright notice and license text;
+- clearly identify significant modifications made to the Software; and
+- not imply endorsement by Kamui Shirou / zookzon.
+
+4. Commercial Licensing
+
+Commercial use may be permitted under a separate written license from the copyright holder. Please contact the project owner through the project's GitHub repository to request commercial permission.
+
+5. No Trademark Rights
+
+This license does not grant permission to use the names, logos, trademarks, or branding of Kamui Shirou / zookzon except as reasonably necessary to provide attribution or identify the original project.
+
+6. Disclaimer of Warranty
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+7. Acceptance and Termination
+
+By exercising permissions granted by this license, you agree to its terms. Any rights granted under this license terminate automatically if you materially violate these terms. Rights may be restored by written permission from the copyright holder.
