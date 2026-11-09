@@ -43,47 +43,14 @@ The compact chips expand only when needed, keeping the normal card small while p
 
 ## What's new in v2
 
-**v2.0.7 includes the improvements developed throughout v2.0.0–v2.0.6**, so users installing the current release receive all of the changes below.
+**v2.0.0** is a major upgrade modernizing the card for modern Home Assistant:
 
-### v2.0.0 — Modernization
-- Rebuilt the card as a native Web Component for better compatibility with modern Home Assistant.
-- Added the built-in visual card editor, card picker registration and climate entity suggestion.
-- Added automatic `target_temp_step` support and temperature protection using `min_temp` / `max_temp`.
-- Replaced legacy `mwc-icon-button` controls with native accessible buttons and `ha-icon`.
-- Added keyboard focus, ARIA labels, responsive mobile layout and reduced-motion support.
-- Operating status now uses `hvac_action`, allowing inverter AC units to correctly display states such as Cooling and Idle.
-- Improved Home Assistant theme compatibility for light, dark and custom themes.
-
-### v2.0.1 — Adaptive controls
-- Changed the default Home Assistant Sections width to a 4-column baseline.
-- Fan controls now adapt automatically to the entity's own `fan_modes`.
-- Supports 4-speed, 7-speed and other fan configurations without assuming only Low / Medium / High.
-- Standard fan speeds receive dynamic numeric levels while Auto, Off, Quiet/Silent/Sleep and Turbo/Powerful/Boost retain dedicated icons.
-- Changed chip order to Fan → Swing → Preset.
-- Restored the control colors: Fan green, Swing gold and Preset cyan.
-- Expanded Fan, Swing and Preset controls use normal font weight.
-
-### v2.0.2–v2.0.4 — Expandable layout development
-- Improved expandable Fan, Swing, Preset and HVAC panels for Home Assistant Sections dashboards.
-- Tested responsive wrapping for entities exposing many fan modes.
-- v2.0.4 returned to the stable v2.0.1 implementation after the v2.0.2/v2.0.3 layout experiments and retained automatic row-height behavior.
-
-### v2.0.5 — Final Sections layout fix
-- Set the verified default layout for expandable panels to **Full width + Auto height**.
-- Uses a **4-column minimum and 1-row minimum** as the standard baseline.
-- Expandable controls can increase the card's natural height so cards below are moved down instead of being overlapped.
-
-### v2.0.6 — Non-Commercial License
-- Includes all v2.0.0–v2.0.5 functionality and layout improvements.
-- First release under the **Simply Thermostat Card Non-Commercial License 1.0**.
-- No intentional card behavior or layout changes from v2.0.5.
-
-### v2.0.7 — HVAC mode colors
-- Added distinct active colors for all standard HVAC modes.
-- Cool = blue, Heat = red, Dry = yellow, Fan Only = cyan, Auto = green, Heat/Cool = purple, Off = gray.
-- Active HVAC buttons use a stronger 28% mode-color background mix for clearer feedback.
-- Inactive HVAC buttons keep the existing Home Assistant theme colors unchanged.
-- No layout or climate-control behavior changes from v2.0.6.
+- **Web Component architecture:** Rebuilt as a native Web Component for better compatibility without depending on private Lit internals.
+- **Visual card editor:** Built-in editor with card picker registration and climate entity suggestions.
+- **Adaptive controls:** Fan speed buttons dynamically adapt to entity `fan_modes` (supporting 4-speed, 7-speed, etc.) with dedicated icons for special modes.
+- **HVAC mode colors:** Distinct active colors for each mode (Cool blue, Heat red, Dry yellow, Fan Only cyan, Auto green, Heat/Cool purple, Off gray) with 28% background tint.
+- **Sections dashboard layout:** Defaults to Full width + Auto height (4-column min, 1-row min) so expandable chip panels never overlap cards below.
+- **Accessibility & UX:** Keyboard focus, ARIA labels, responsive mobile layout, and `prefers-reduced-motion` support.
 
 For detailed development history, see [CHANGELOG.md](CHANGELOG.md).
 
@@ -109,7 +76,7 @@ resources:
     type: module
 ```
 
-Then hard-refresh the browser. The console should report `Simply Thermostat Card registered v2.0.7`.
+Then hard-refresh the browser. The console should report `Simply Thermostat Card registered v2.0.0`.
 
 ## Configuration
 
@@ -179,19 +146,13 @@ v2 uses a native Web Component implementation. It intentionally avoids `mwc-icon
 
 ## License
 
-Starting with **v2.0.6**, Simply Thermostat Card is distributed under the **Simply Thermostat Card Non-Commercial License 1.0**.
-
-You may use, copy, modify, fork and redistribute the project for personal and other non-commercial purposes. Commercial use, resale, inclusion in paid products/services, or other revenue-generating use requires prior written permission from the copyright holder.
-
-Internal use by a business or organization for its own non-revenue-generating Home Assistant dashboard is permitted under the license.
-
-**Important:** versions previously released under the MIT License remain licensed under the MIT terms that applied to those versions. The non-commercial restriction applies to v2.0.6 and later versions first published under the new license. See [LICENSE](LICENSE) for the complete terms.
+This project is licensed under the **GNU General Public License v3.0 (GPL-3.0-only)** — see the [LICENSE](LICENSE) file for details.
 
 ## Credits
 
 **Author:** Kamui Shirou / zookzon  
 **Project:** Simply Thermostat Card  
-**License:** Simply Thermostat Card Non-Commercial License 1.0 (v2.0.6+)
+**License:** GPL-3.0-only
 
 The original design was inspired by Mushroom-style thermostat layouts and Simple Thermostat concepts. v2 preserves the original Simply Thermostat interaction model while modernizing its Home Assistant frontend integration.
 
@@ -199,4 +160,4 @@ The original design was inspired by Mushroom-style thermostat layouts and Simple
 
 See [CHANGELOG.md](CHANGELOG.md) for full details.
 
-Current release: **v2.0.7**.
+Current release: **v2.0.0**.
