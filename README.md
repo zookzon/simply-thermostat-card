@@ -76,7 +76,7 @@ resources:
     type: module
 ```
 
-Then hard-refresh the browser. The console should report `Simply Thermostat Card registered v2.0.0`.
+Then hard-refresh the browser. The console should report `Simply Thermostat Card registered v2.0.1`.
 
 ## Configuration
 
@@ -160,4 +160,4 @@ The original design was inspired by Mushroom-style thermostat layouts and Simple
 
 See [CHANGELOG.md](CHANGELOG.md) for full details.
 
-Current release: **v2.0.0**.
+Current release: **v2.0.1**.

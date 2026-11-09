@@ -2,6 +2,11 @@
 
 All notable changes to **Simply Thermostat Card** are documented here.
 
+## [v2.0.1] — 2026-11-10
+
+### Security
+- Escape `step` and `icon_size` config attributes in the visual editor form using `esc()` to prevent attribute breakout and XSS.
+
 ## [v2.0.0] — 2026-09-26
 
 ### Licensing
